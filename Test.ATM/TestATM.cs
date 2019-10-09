@@ -16,5 +16,10 @@ namespace Test.ATM
 
         }
 
+        [Test]
+        public void something()
+        {
+            Assert.That(2 + 2, Is.EqualTo(4));
+        }
     }
 }
