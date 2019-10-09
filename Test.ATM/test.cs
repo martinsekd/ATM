@@ -20,11 +20,11 @@ namespace Test.ATM
             int a = 0;
             if(a==1)
             {
-                Console.WriteLine("tal er 1");
+                //Console.WriteLine("tal er 1");
                 return true;
             } else
             {
-                Console.WriteLine("Tal er 0");
+                //Console.WriteLine("Tal er 0");
                 return false;
             }
         }
