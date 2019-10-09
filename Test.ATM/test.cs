@@ -6,23 +6,26 @@ using System.Threading.Tasks;
 
 namespace Test.ATM
 {
-    class test
+    public class test
     {
-        public void metodeA()
+        public bool metodeA()
         {
             int a = 0;
             a++;
+            return true;
         }
 
-        public void metodeB()
+        public bool metodeB()
         {
             int a = 0;
             if(a==1)
             {
                 Console.WriteLine("tal er 1");
+                return true;
             } else
             {
                 Console.WriteLine("Tal er 0");
+                return false;
             }
         }
     }

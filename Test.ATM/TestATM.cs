@@ -21,5 +21,19 @@ namespace Test.ATM
         {
             Assert.That(2 + 2, Is.EqualTo(4));
         }
+
+        [Test]
+        public void something2()
+        {
+            test uut = new test();
+            Assert.That(uut.metodeA(), Is.True);
+        }
+
+        [Test]
+        public void something3()
+        {
+            test uut = new test();
+            Assert.That(uut.metodeB(), Is.True);
+        }
     }
 }
