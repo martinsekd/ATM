@@ -26,14 +26,14 @@ namespace Test.ATM
         public void something2()
         {
             test uut = new test();
-            Assert.That(uut.metodeA(), Is.True);
+            Assert.That(uut.metodeA(), Is.EqualTo(true));
         }
 
         [Test]
         public void something3()
         {
             test uut = new test();
-            Assert.That(uut.metodeB(), Is.True);
+            Assert.That(uut.metodeB(), Is.EqualTo(true));
         }
     }
 }
