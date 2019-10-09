@@ -25,7 +25,7 @@ namespace Test.ATM
             } else
             {
                 //Console.WriteLine("Tal er 0");
-                return false;
+                return true;
             }
         }
     }
