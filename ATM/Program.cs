@@ -14,7 +14,7 @@ namespace ATM
 
             rec.TransponderDataReady += ATM.Receive;
 
-            while(true)
+            while (true)
             {
 
             }

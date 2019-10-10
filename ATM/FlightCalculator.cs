@@ -8,22 +8,49 @@ namespace ATM
 {
     class FlightCalculator: IFlightCalculator
     {
-    public double CalculateSpeed(TransponderData oldData, TransponderData newData)
-    {
-        double oldX = Convert.ToDouble(oldData.X);
-        double oldY = Convert.ToDouble(oldData.Y);
-        double newX = Convert.ToDouble(newData.X);
-        double newY = Convert.ToDouble(newData.Y);
+        public double CalculateSpeed(TransponderData oldData, TransponderData newData)
+        {
+            int deltaX = oldData.X - newData.X;
+            int deltaY = oldData.Y - newData.Y;
 
-        double distance = Math.Sqrt(Math.Pow(oldX - newX, 2) + Math.Pow(oldY - newY, 2));
-        double timeDif = (oldData.Time - newData.Time).TotalMilliseconds;
+            double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+            TimeSpan timespan = newData.Time - oldData.Time;
+            double timedif = timespan.TotalMilliseconds;
+            return distance/(timedif/1000);
+        }
 
-        return distance / timeDif / 1000;
-    }
+        public double CalculateDirection(TransponderData oldData, TransponderData newData)
+        {
+            double deltaX = newData.X - oldData.X;
+            double deltaY = newData.Y - oldData.Y;
 
-    public double CalculateDirection(TransponderData oldData, TransponderData newData)
-    {
-        return 0;
-    }
+            double toDegreeFactor = 360 / (2 * Math.PI);
+
+            double angle = Math.Atan(deltaY/deltaX)*toDegreeFactor;
+
+            double degree = 0;
+            if(newData.X > oldData.X)
+            {
+                degree = 90 - angle;
+            } else if (newData.X < oldData.X)
+            {
+                degree = 360 - (angle + 90);
+            } else
+            {
+                if(newData.Y > oldData.Y)
+                {
+                    degree = 0;
+                } else if(newData.Y < oldData.Y)
+                {
+                    degree = 180;
+                } else
+                {
+                    degree = 0;
+                }
+            }
+
+            return degree;
+        }
+
     }
 }
