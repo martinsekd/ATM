@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace ATM
 {
-    class Seperation
+    class FlightCalculator
     {
-        public void setString(string str)
+        public int CalculateSpeed(TransponderData oldData, TransponderData newData)
         {
-            
-
+            return oldData.
         }
     }
 }

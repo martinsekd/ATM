@@ -9,24 +9,19 @@ namespace ATM
 {
     class TransponderData
     {
-        private string tag_;
-        private int X_;
-        private int Y_;
-        private int altitude_;
-        private DateTime stamp_;
+        public string Tag { private set; get; }
+        public int X { private set; get; }
+        public int Y { private set; get; }
+        public int Altitude { private set; get; }
+        public DateTime Time { private set; get; }
 
-        public TransponderData(string tag, string X, string Y, string altitude, string stamp)
+        public TransponderData(string tag, int X, int Y, int altitude, DateTime time)
         {
-            tag_ = tag;
-            X_ = int.Parse(X);
-            Y_ = int.Parse(Y);
-            altitude_ = int.Parse(altitude);
-            stamp_ = DateTime.ParseExact(stamp, "yyyyMMddHHmmssFFF",null);
-            Console.Clear();
-            Console.WriteLine("{0}",stamp_);
-            Console.Write("{0}", stamp_);
-            //Console.WriteLine("."+stamp_.Millisecond);
-            
+            this.Tag = tag;
+            this.X = X;
+            this.Y = Y;
+            this.Altitude = altitude;
+            this.Time = time;
         }
 
     }
