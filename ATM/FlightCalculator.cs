@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace ATM
 {
-    class FlightCalculator
+    class FlightCalculator: IFlightCalculator
     {
-        public int CalculateSpeed(TransponderData oldData, TransponderData newData)
+        public double CalculateSpeed(TransponderData oldData, TransponderData newData)
         {
             int deltaX = oldData.X - newData.X;
             int deltaY = oldData.Y - newData.Y;
 
             double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
             TimeSpan timespan = newData.Time - oldData.Time;
-            int timedif = (int)timespan.TotalMilliseconds;
-            return (int) Math.Round(distance/(timedif*1000),0);
+            double timedif = timespan.TotalMilliseconds;
+            return distance/(timedif/1000);
         }
 
-        public double CalculateDegree(TransponderData oldData, TransponderData newData)
+        public double CalculateDirection(TransponderData oldData, TransponderData newData)
         {
             double deltaX = newData.X - oldData.X;
             double deltaY = newData.Y - oldData.Y;

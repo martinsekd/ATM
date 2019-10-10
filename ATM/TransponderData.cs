@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ATM
 {
-    class TransponderData
+    public class TransponderData
     {
         public string Tag { private set; get; }
         public int X { private set; get; }

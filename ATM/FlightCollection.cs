@@ -8,5 +8,5 @@ namespace ATM
 {
     class FlightCollection
     {
-
     }
+}
