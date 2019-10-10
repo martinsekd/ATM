@@ -10,7 +10,7 @@ namespace ATM
     {
         public int CalculateSpeed(TransponderData oldData, TransponderData newData)
         {
-            return oldData.
+            return 0;
         }
     }
 }
