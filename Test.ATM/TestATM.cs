@@ -41,7 +41,7 @@ namespace Test.ATM
             Assert.That(uut.metodeB(), Is.EqualTo(true));
         }
 
-        [TestCase(70,-100,-10,-40,156.80)]
+        [TestCase(10,40,70,-100,156.80)]
         public void CalculateDirection_add2TransponderData_c (int x1, int y1, int x2, int y2, double c)
         {
             TransponderData t1 = new TransponderData("TEST", x1, y1, 100, new DateTime());
