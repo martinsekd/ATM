@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATM", "ATM\ATM.csproj", "{F91EB3A4-5205-433D-A3EE-400236832865}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ATM.System", "ATM\ATM.System.csproj", "{F91EB3A4-5205-433D-A3EE-400236832865}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ATM", "Test.ATM\Test.ATM.csproj", "{56C28F11-ACEE-4EBD-B6D0-A8EFC90CFEAA}"
 EndProject

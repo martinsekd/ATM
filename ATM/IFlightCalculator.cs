@@ -1,4 +1,4 @@
-﻿namespace ATM
+﻿namespace ATM.System
 {
     public interface IFlightCalculator
     {

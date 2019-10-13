@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ATM
+namespace ATM.System
 {
     public class TransponderData
     {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ATM
+namespace ATM.System
 {
-    class FlightCalculator: IFlightCalculator
+    public class FlightCalculator: IFlightCalculator
     {
         public double CalculateSpeed(TransponderData oldData, TransponderData newData)
         {
