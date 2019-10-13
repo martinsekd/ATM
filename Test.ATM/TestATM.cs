@@ -18,7 +18,7 @@ namespace Test.ATM
         [SetUp]
         public void setUp()
         {
-            new FlightCalculator();
+            uut = new FlightCalculator();
         }
 
         [Test]
