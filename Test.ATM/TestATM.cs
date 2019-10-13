@@ -42,8 +42,8 @@ namespace Test.ATM
         }
 
         [TestCase(10,40,70,-100,156.80)]
-        [TestCase(10, 40, 10, 80, 180)]
-        [TestCase(10, 40, 10, 10, 0)]
+        [TestCase(10, 40, 10, 80, 0)]
+        [TestCase(10, 40, 10, 10, 180)]
         [TestCase(10, 40, 10, 40, 0)]
         [TestCase(10, 100, 11, 10, 179.36)]
         [TestCase(10, 100, 11, 200, 0.57)]
