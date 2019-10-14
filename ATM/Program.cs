@@ -43,7 +43,14 @@ namespace ATM.System
             gui = new Program();
             window = new Window();
 
+            var field = new Rectangle();
+            field.Stroke = Brushes.Red;
+            field.Width = 500;
+            field.Height = 500;
             can = new Canvas();
+            can.Children.Add(field);
+            Canvas.SetTop(field,0);
+            Canvas.SetLeft(field, 0);
             window.Content = can;
 
             shapes = new Ellipse[30];
@@ -53,8 +60,8 @@ namespace ATM.System
             shapes[i].Width = 10;
             can.Children.Add(shapes[i]);
             can.Background = Brushes.Gray;
-            Canvas.SetTop(shapes[i], 0);
-            Canvas.SetLeft(shapes[i], 0);
+            Canvas.SetTop(shapes[i], 100);
+            Canvas.SetLeft(shapes[i], 600);
             shapes[i].Fill = Brushes.Green;
             }
             window.Show();
