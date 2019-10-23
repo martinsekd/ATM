@@ -31,6 +31,7 @@ namespace ATM.System
 
             rec.TransponderDataReady += ATM.Receive;
             t.Join();
+
             while (true)
             {
 

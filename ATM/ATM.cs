@@ -15,6 +15,7 @@ namespace ATM.System
         {
 
         }
+
         private ATM(IDataFormatter dataFormatter, IFlightCalculator flightCalculator)
         {
             flightCollection = new FlightCollection(flightCalculator, dataFormatter);
