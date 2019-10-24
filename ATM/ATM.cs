@@ -28,7 +28,7 @@ namespace ATM.System
                 instance.flightCollection.HandleNewData(data);
             }
 
-            instance.flightCollection.Render();
+            instance.flightCollection.notify();
         }
 
         public static ATM Instance
