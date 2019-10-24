@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ATM.Interfaces;
+using ATM.System;
 using NUnit.Framework.Internal;
 
 namespace ATM
@@ -23,10 +24,10 @@ namespace ATM
                 DateTime.Now.ToString() + ": " + txt);
         }
 
-        private void Logwriter(object sender, ICollisionDetection e)
+        private void Logwriter(object sender, CollisionArgs e)
         {
-
-            Log.WriteLine("Flight");
+            var fly = e.Collision;
+            Log.WriteLine(txt:"fly");
         }
 
 
