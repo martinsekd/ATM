@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ATM.Interfaces
 {
-    class ICollisionDetection
+    class ILog
     {
-
+        public void Writelog(string strFileName, string strMessage) { }
     }
 }

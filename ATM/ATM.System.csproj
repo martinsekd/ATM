@@ -65,6 +65,7 @@
     <Compile Include="Interfaces\IDataFormatter.cs" />
     <Compile Include="Interfaces\IFlightCalculator.cs" />
     <Compile Include="Interfaces\IFlightCollection.cs" />
+    <Compile Include="Interfaces\ILog.cs" />
     <Compile Include="InvalidInputException.cs" />
     <Compile Include="Interfaces\IRender.cs" />
     <Compile Include="Program.cs" />
