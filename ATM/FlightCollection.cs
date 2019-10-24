@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace ATM.System
 {
-    class FlightCollection : IFlightCollection
+    public class FlightCollection : IFlightCollection
     {
         private bool seperation = false;
         public void Seperation(TransponderData t1, TransponderData t2)
@@ -45,7 +45,12 @@ namespace ATM.System
 
         private void getTransponderData(object sender,TransponderArgs e)
         {
-            var transponder = e.transponderData;
+            var transponderList = e.transponderData;
+
+            foreach(TransponderData transponderData in transponderList)
+            {
+                HandleNewData(transponderData);
+            }
         }
 
         public event EventHandler<FlightArgs> flightsChanged;
@@ -55,9 +60,9 @@ namespace ATM.System
             flightsChanged?.Invoke(this,e);
         }
 
-        public void HandleNewData(string s)
+        public void HandleNewData(TransponderData newData)
         {
-            TransponderData newData = dataFormatter.StringToTransponderData(s);
+            
 
             if (FlightList.Exists(f => f.TData.Tag == newData.Tag))
             {
