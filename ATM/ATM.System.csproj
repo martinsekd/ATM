@@ -61,11 +61,11 @@
     <Compile Include="FlightCalculator.cs" />
     <Compile Include="FlightCollection.cs" />
     <Compile Include="DataFormatter.cs" />
-    <Compile Include="IDataFormatter.cs" />
-    <Compile Include="IFlightCalculator.cs" />
-    <Compile Include="IFlightCollection.cs" />
+    <Compile Include="Interfaces\IDataFormatter.cs" />
+    <Compile Include="Interfaces\IFlightCalculator.cs" />
+    <Compile Include="Interfaces\IFlightCollection.cs" />
     <Compile Include="InvalidInputException.cs" />
-    <Compile Include="IRender.cs" />
+    <Compile Include="Interfaces\IRender.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Render.cs" />
@@ -75,6 +75,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
