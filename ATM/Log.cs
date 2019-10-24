@@ -25,9 +25,7 @@ namespace ATM
             {
                 return false;
             }
+            Log.WriteLog("ConsoleLog.txt", String.Format("{0} @ {1}", "Log is Created by Martinique and Magnus the mosquito", DateTime.Now));
         }
-
-        WriteLogFile.WriteLog("ConsoleLog.txt", 
-        String.Format("{0} @ {1}", "Log is Created by Martinique and Magnus the mosquito", DateTime.Now));
     }
 }
