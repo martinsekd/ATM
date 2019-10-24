@@ -32,6 +32,8 @@ namespace ATM.System
             rec.TransponderDataReady += ATM.Receive;
             t.Join();
 
+            //Log.WriteLog("ConsoleLog.txt", String.Format("{0} @ {1}", "Log is Created by Martinique and Magnus the mosquito", DateTime.Now));
+
             while (true)
             {
 
