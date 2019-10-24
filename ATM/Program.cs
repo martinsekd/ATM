@@ -21,7 +21,8 @@ namespace ATM.System
         [STAThread]
         static void Main(string[] args)
         {
-
+            
+            
             Thread t = new Thread(guimetode);
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
@@ -29,7 +30,9 @@ namespace ATM.System
             
             var rec = TransponderReceiver.TransponderReceiverFactory.CreateTransponderDataReceiver();
 
-            rec.TransponderDataReady += ATM.Receive;
+            IDataFormatter df = new DataFormatter(rec);
+
+            //rec.TransponderDataReady += ATM.Receive;
             t.Join();
 
             while (true)

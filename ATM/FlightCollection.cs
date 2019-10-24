@@ -29,15 +29,23 @@ namespace ATM.System
         }
 
         private List<Flight> FlightList;
+
         private IFlightCalculator flightCalculator;
-        private IDataFormatter dataFormatter;
+        //private IDataFormatter dataFormatter;
+
         private IRender render;
         public FlightCollection(IFlightCalculator flightCalculator, IDataFormatter dataFormatter)
         {
+            dataFormatter.transponderChanged += getTransponderData;
             this.FlightList = new List<Flight>();
             this.flightCalculator = flightCalculator;
-            this.dataFormatter = dataFormatter;
+            //this.dataFormatter = dataFormatter;
             render = new Render(this);
+        }
+
+        private void getTransponderData(object sender,TransponderArgs e)
+        {
+            var transponder = e.transponderData;
         }
 
         public event EventHandler<FlightArgs> flightsChanged;
