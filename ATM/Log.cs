@@ -24,10 +24,11 @@ namespace ATM
                 DateTime.Now.ToString() + ": " + txt);
         }
 
+        // skriver collision event til logfil.
         private void Logwriter(object sender, CollisionArgs e)
         {
             var fly = e.Collision;
-            Log.WriteLine(txt:"fly");
+            Log.WriteLine(txt:"fly" + fly);
         }
 
 
