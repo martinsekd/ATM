@@ -61,6 +61,7 @@
     <Compile Include="FlightCalculator.cs" />
     <Compile Include="FlightCollection.cs" />
     <Compile Include="DataFormatter.cs" />
+    <Compile Include="Interfaces\ICollisionDetection.cs" />
     <Compile Include="Interfaces\IDataFormatter.cs" />
     <Compile Include="Interfaces\IFlightCalculator.cs" />
     <Compile Include="Interfaces\IFlightCollection.cs" />
