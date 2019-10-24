@@ -8,6 +8,7 @@ namespace ATM.System
 {
     public class FlightCalculator: IFlightCalculator
     {
+        //Calculates the speed of a flight based on old and new TransponderData
         public double CalculateSpeed(TransponderData oldData, TransponderData newData)
         {
             int deltaX = oldData.X - newData.X;
@@ -19,6 +20,7 @@ namespace ATM.System
             return distance/(timedif/1000);
         }
 
+        //Calculates the direction of a flight based on old and new TransponderData
         public double CalculateDirection(TransponderData oldData, TransponderData newData)
         {
             double deltaX = newData.X - oldData.X;

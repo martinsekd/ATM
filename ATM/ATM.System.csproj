@@ -57,11 +57,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ATM.cs" />
+    <Compile Include="Collision.cs" />
+    <Compile Include="CollisionCollection.cs" />
+    <Compile Include="CollisionDetector.cs" />
     <Compile Include="Flight.cs" />
     <Compile Include="FlightCalculator.cs" />
     <Compile Include="FlightCollection.cs" />
     <Compile Include="DataFormatter.cs" />
-    <Compile Include="Interfaces\ICollisionDetection.cs" />
+    <Compile Include="Interfaces\ICollisionCollection.cs" />
+    <Compile Include="Interfaces\ICollisionDetector.cs" />
     <Compile Include="Interfaces\IDataFormatter.cs" />
     <Compile Include="Interfaces\IFlightCalculator.cs" />
     <Compile Include="Interfaces\IFlightCollection.cs" />
