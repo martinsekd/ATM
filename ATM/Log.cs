@@ -5,12 +5,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ATM.Interfaces;
+using NUnit.Framework.Internal;
 
 namespace ATM
 {
     class Log : ILog
     {
-        public static bool WriteLog(string strFileName, string strMessage)
+        // Fil angivelse på skrivebord.
+        private static string LogFile =
+            Environment.GetFolderPath(
+                Environment.SpecialFolder.Desktop) + "\\Log.txt";
+
+        // tid + txt
+        public static void WriteLine(string txt)
+        {
+            File.AppendAllText(LogFile,
+                DateTime.Now.ToString() + ": " + txt);
+        }
+
+        private void Logwriter(object sender, ICollisionDetection e)
+        {
+
+            Log.WriteLine("Flight");
+        }
+
+
+        /*public static bool WriteLog(string strFileName, string strMessage)
         {
             try
             {
@@ -26,6 +46,6 @@ namespace ATM
                 return false;
             }
             //Log.WriteLog("ConsoleLog.txt", String.Format("{0} @ {1}", "Log is Created by Martinique and Magnus the mosquito", DateTime.Now));
-        }
+        }*/
     }
 }
