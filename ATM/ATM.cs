@@ -8,7 +8,7 @@ namespace ATM.System
 {
     public sealed class ATM
     {
-        private static readonly ATM instance = new ATM(new DataFormatter(), new FlightCalculator());
+        //private static readonly ATM instance = new ATM(new DataFormatter(), new FlightCalculator());
         private FlightCollection flightCollection;
 
         static ATM()
@@ -21,7 +21,7 @@ namespace ATM.System
             flightCollection = new FlightCollection(flightCalculator, dataFormatter);
         }
 
-        public static void Receive(object sender, TransponderReceiver.RawTransponderDataEventArgs e)
+        /*public static void Receive(object sender, TransponderReceiver.RawTransponderDataEventArgs e)
         {
             foreach (var data in e.TransponderData)
             {
@@ -29,11 +29,11 @@ namespace ATM.System
             }
 
             instance.flightCollection.notify();
-        }
+        }*/
 
-        public static ATM Instance
+        /*public static ATM Instance
         {
             get { return instance; }
-        }
+        }*/
     }
 }
