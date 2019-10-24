@@ -34,6 +34,7 @@ namespace ATM.System
         //private IDataFormatter dataFormatter;
 
         private IRender render;
+
         public FlightCollection(IFlightCalculator flightCalculator, IDataFormatter dataFormatter)
         {
             dataFormatter.transponderChanged += getTransponderData;
@@ -43,7 +44,7 @@ namespace ATM.System
             render = new Render(this);
         }
 
-        private void getTransponderData(object sender,TransponderArgs e)
+        public void getTransponderData(object sender,TransponderArgs e)
         {
             var transponderList = e.transponderData;
 
@@ -51,6 +52,7 @@ namespace ATM.System
             {
                 HandleNewData(transponderData);
             }
+            notify();
         }
 
         public event EventHandler<FlightArgs> flightsChanged;

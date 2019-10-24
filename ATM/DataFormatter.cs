@@ -11,6 +11,7 @@ namespace ATM.System
         public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver)
         {
             transponderReceiver.TransponderDataReady += StringToTransponderData;
+            FlightCollection flightCollection = new FlightCollection(new FlightCalculator(), this);
         }
 
         public event EventHandler<TransponderArgs> transponderChanged;
