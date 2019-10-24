@@ -8,8 +8,22 @@ namespace ATM.System
 {
     class DataFormatter: IDataFormatter
     {
-        public TransponderData StringToTransponderData(string str)
+        public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver)
         {
+            transponderReceiver.TransponderDataReady += StringToTransponderData;
+        }
+
+        public event EventHandler<TransponderArgs> transponderChanged;
+
+        protected virtual void OnTransponderChanged(TransponderArgs e)
+        {
+            transponderChanged?.Invoke(this, e);
+        }
+
+        public void StringToTransponderData(object sender, TransponderReceiver.RawTransponderDataEventArgs e)
+        {
+            List<TransponderData> transponderList = new List<TransponderData>();
+            foreach(string str in e.TransponderData) {
             string[] input = str.Split(';');
             
             if(input.Length != 5)
@@ -23,7 +37,14 @@ namespace ATM.System
             int altitude = int.Parse(input[3]);
             DateTime timeStamp = DateTime.ParseExact(input[4], "yyyyMMddHHmmssFFF", null);
 
-            return new TransponderData(tag, X, Y, altitude, timeStamp);
+            transponderList.Add(new TransponderData(tag, X, Y, altitude, timeStamp));
+            }
+            OnTransponderChanged(new TransponderArgs { transponderData = transponderList });
+        }
+
+        public TransponderData StringToTransponderData(string s)
+        {
+            throw new NotImplementedException();
         }
     }
 }
