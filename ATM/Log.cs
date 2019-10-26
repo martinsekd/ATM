@@ -31,6 +31,11 @@ namespace ATM
             Log.WriteLine(txt:"fly" + fly);
         }
 
+        void ILog.Logwriter(object sender, CollisionArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
 
         /*public static bool WriteLog(string strFileName, string strMessage)
         {
