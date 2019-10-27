@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="TransponderReceiver, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\TransponderReceiver.dll</HintPath>
+      <HintPath>..\TransponderReceiver.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
