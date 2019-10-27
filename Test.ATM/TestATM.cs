@@ -105,17 +105,19 @@ namespace Test.ATM
             var fakeReceiver = Substitute.For<ITransponderReceiver>();
             fakeDataFormatter = new DataFormatter(fakeReceiver);
             List<string> flightList = new List<string>();
-            TransponderArgs args = new TransponderArgs { };
+            TransponderArgs args = new TransponderArgs();
 
             //act
             flightList.Add("TTT10;30;50;14000;20101006213456789");
-            fakeDataFormatter.transponderChanged += (sender, arg) => args = arg;
+            fakeDataFormatter.transponderChanged += (sender, arg) => {
+                args.transponderData = arg.transponderData;
+            };
             fakeReceiver.TransponderDataReady += Raise.EventWith(new RawTransponderDataEventArgs(flightList));
 
 
             //assert
 
-            Assert.That(actual: args.transponderData[0].X, expression: Is.EqualTo(30));
+            Assert.That(args.transponderData[0].X, expression: Is.EqualTo(30));
         }
 
         
