@@ -109,10 +109,13 @@ namespace Test.ATM
 
             //act
             flightList.Add("TTT10;30;50;14000;20101006213456789");
+
+            fakeReceiver.TransponderDataReady += Raise.EventWith(new RawTransponderDataEventArgs(flightList));
+
             fakeDataFormatter.transponderChanged += (sender, arg) => {
                 args.transponderData = arg.transponderData;
             };
-            fakeReceiver.TransponderDataReady += Raise.EventWith(new RawTransponderDataEventArgs(flightList));
+            
 
 
             //assert
