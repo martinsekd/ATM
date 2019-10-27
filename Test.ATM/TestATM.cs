@@ -10,7 +10,7 @@ using TransponderReceiver;
 
 namespace Test.ATM
 {
-    
+
     [TestFixture]
     public class TestATM
     {
@@ -23,8 +23,8 @@ namespace Test.ATM
         private IFlightFilter fakeFlightFilter;
         private ILog fakeLog;
         private IRender fakeRender;
-        
-        
+
+
         private FlightCalculator uut;
         private FlightCollection flightCollection;
 
@@ -56,14 +56,14 @@ namespace Test.ATM
 
 
         #region flightCalculator
-        [TestCase(10,40,70,-100,156.80)]
+        [TestCase(10, 40, 70, -100, 156.80)]
         [TestCase(10, 40, 10, 80, 0)]
         [TestCase(10, 40, 10, 10, 180)]
         [TestCase(10, 40, 10, 40, 0)]
         [TestCase(10, 100, 11, 10, 179.36)]
         [TestCase(10, 100, 11, 200, 0.57)]
         [TestCase(0, 0, -1, -100, 180.57)]
-        public void CalculateDirection_add2TransponderData_c (int x1, int y1, int x2, int y2, double c)
+        public void CalculateDirection_add2TransponderData_c(int x1, int y1, int x2, int y2, double c)
         {
             TransponderData t1 = new TransponderData("TEST", x1, y1, 100, new DateTime());
             var t2 = new TransponderData("TEST1", x2, y2, 100, new DateTime());
@@ -71,8 +71,8 @@ namespace Test.ATM
             double degree = uut.CalculateDirection(t1, t2);
 
             Assert.That(degree, Is.InRange(c, c + 0.01));
-            
-            
+
+
         }
 
         #endregion
@@ -87,7 +87,7 @@ namespace Test.ATM
             flightCollection = new FlightCollection(fakeFlightCalculator, fakeFlightFilter);
 
             //act
-            
+
             //assert
 
         }
@@ -109,16 +109,16 @@ namespace Test.ATM
 
             //act
             flightList.Add("TTT10;30;50;14000;20101006213456789");
-            fakeDataFormatter.transponderChanged += (sender,arg) => args = arg;
+            fakeDataFormatter.transponderChanged += (sender, arg) => args = arg;
             fakeReceiver.TransponderDataReady += Raise.EventWith(new RawTransponderDataEventArgs(flightList));
 
 
             //assert
-            
+
             Assert.That(actual: args.transponderData[0].X, expression: Is.EqualTo(30));
         }
 
-        public 
+        
         #endregion
 
         #region Log
@@ -129,15 +129,17 @@ namespace Test.ATM
 
         #region collisionDetection
         #endregion
-    }
 
-    internal class TestTransponderReceiver : TransponderReceiver.ITransponderReceiver
-    {
-        public event EventHandler<RawTransponderDataEventArgs> TransponderDataReady;
 
-        public void RaiseEvent(List<string> flightList)
-        {
-            TransponderDataReady?.Invoke(this, new RawTransponderDataEventArgs(flightList));
-        }
+        /*internal class TestTransponderReceiver : ITransponderReceiver
+            {
+                public event EventHandler<RawTransponderDataEventArgs> TransponderDataReady;
+
+                public void RaiseEvent(List<string> flightList)
+                {
+                    TransponderDataReady?.Invoke(this, new RawTransponderDataEventArgs(flightList));
+                }
+            }*/
+
     }
 }
