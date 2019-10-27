@@ -11,7 +11,7 @@ namespace ATM.System
         public List<Flight> flights { get; set; }
     }
 
-    interface IFlightCollection
+    public interface IFlightCollection
     {
         event EventHandler<FlightArgs> flightsChanged;
     }

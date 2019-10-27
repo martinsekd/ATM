@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ATM.System
 {
-    class DataFormatter: IDataFormatter
+    public class DataFormatter: IDataFormatter
     {
         public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver)
         {
