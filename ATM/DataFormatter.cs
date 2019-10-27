@@ -10,8 +10,9 @@ namespace ATM.System
     {
         public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver)
         {
+            IFlightFilter flightFilter = new FlightFilter(this);
             transponderReceiver.TransponderDataReady += StringToTransponderData;
-            FlightCollection flightCollection = new FlightCollection(new FlightCalculator(), this);
+            
         }
 
         public event EventHandler<TransponderArgs> transponderChanged;
@@ -24,7 +25,7 @@ namespace ATM.System
         public void StringToTransponderData(object sender, TransponderReceiver.RawTransponderDataEventArgs e)
         {
             List<TransponderData> transponderList = new List<TransponderData>();
-            foreach(var str in e.TransponderData) {
+            foreach(var str in e.TransponderData.ToList()) {
                 string[] input = str.Split(';');
                 
                 if(input.Length != 5)

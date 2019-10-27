@@ -35,9 +35,9 @@ namespace ATM.System
 
         private IRender render;
 
-        public FlightCollection(IFlightCalculator flightCalculator, IDataFormatter dataFormatter)
+        public FlightCollection(IFlightCalculator flightCalculator, IFlightFilter flightFilter)
         {
-            dataFormatter.transponderChanged += getTransponderData;
+            flightFilter.transponderFilterChanged += getTransponderData;
             this.FlightList = new List<Flight>();
             this.flightCalculator = flightCalculator;
             //this.dataFormatter = dataFormatter;

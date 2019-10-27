@@ -15,7 +15,7 @@ namespace ATM.System
 
         public CollisionDetector()
         {
-
+            var log = new Log(this);
         }
 
         public void DetectCollisions(List<Flight> flights)
