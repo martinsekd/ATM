@@ -2,31 +2,39 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows.Controls;
 using NUnit.Framework;
 
 namespace ATM.System
 {
     public class CollisionDetector: ICollisionDetector
     {
-        private ICollisionCollection collisionCollection = new CollisionCollection();
+        public ICollisionCollection CollisionCollection {get; private set;}
+        public List<Collision> Collisions => CollisionCollection.Collisions;
 
-        public event EventHandler<CollisionArgs> newCollision;
+        public event EventHandler<CollisionArgs> NewCollision;
 
 
-        public CollisionDetector()
+        public CollisionDetector(IFlightCollection flightCollection, ICollisionCollection collisionCollection)
         {
+            flightCollection.flightsChanged += OnFlightsChanged;
+            CollisionCollection = collisionCollection;
+        }
 
+        public void OnFlightsChanged(object sender, FlightArgs e)
+        {
+            DetectCollisions(e.flights);
         }
 
         public void DetectCollisions(List<Flight> flights)
         {
             var sortedFlights = flights.OrderBy(f => f.TData.X).ToList();
-            var collisions = GenerateCollisions(sortedFlights);
-            var newCollisions = collisionCollection.HandleUpdatedCollisions(collisions);
+            var updatedCollisions = GenerateCollisions(sortedFlights);
+            var newCollisions = CollisionCollection.HandleUpdatedCollisions(updatedCollisions);
             EmitNewCollisions(newCollisions);
         }
 
-        public List<Collision> GenerateCollisions(List<Flight> sortedFlights)
+        private List<Collision> GenerateCollisions(List<Flight> sortedFlights)
         {
             List<Collision> collisions = new List<Collision>();
             for (var i = 0; i < sortedFlights.Count; i++)
@@ -34,21 +42,21 @@ namespace ATM.System
                 var currentFlight = sortedFlights[i];
                 var j = i + 1;
 
-                if (j >= sortedFlights.Count) continue;
-                while (sortedFlights[j].TData.X - currentFlight.TData.X < 5000)
+                while (j < sortedFlights.Count && sortedFlights[j].TData.X - currentFlight.TData.X < 5000)
                 {
                     if (IsCollision(currentFlight, sortedFlights[j]))
                     {
                         collisions.Add(new Collision(currentFlight, sortedFlights[j], DateTime.Now));
                     }
+
+                    j++;
                 }
             }
-
             return collisions;
         }
 
        
-        public bool IsCollision(Flight flightA, Flight flightB)
+        private bool IsCollision(Flight flightA, Flight flightB)
         {
             int deltaX = Math.Abs(flightA.TData.X - flightB.TData.X);
             int deltaY = Math.Abs(flightA.TData.Y - flightB.TData.Y);
@@ -66,13 +74,13 @@ namespace ATM.System
         {
             foreach (var c in newCollisions)
             {
-                EmitNewCollisions(c);
+                EmitNewCollision(c);
             }
         }
 
-        public void EmitNewCollisions(Collision col)
+        private void EmitNewCollision(Collision col)
         {
-            newCollision?.Invoke(this, new CollisionArgs(col));
+            NewCollision?.Invoke(this, new CollisionArgs(col));
         }
 
     }

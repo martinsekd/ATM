@@ -10,7 +10,7 @@ using NUnit.Framework.Internal;
 
 namespace ATM
 {
-    class Log : ILog
+    public class Log : ILog
     {
         // Fil angivelse på skrivebord.
         private static string LogFile =
@@ -18,6 +18,11 @@ namespace ATM
                 Environment.SpecialFolder.Desktop) + "\\Log.txt";
 
         // tid + txt
+
+        public Log(ICollisionDetector collisionDetector)
+        {
+            collisionDetector.NewCollision += Logwriter;
+        }
         public static void WriteLine(string txt)
         {
             File.AppendAllText(LogFile,
@@ -25,7 +30,7 @@ namespace ATM
         }
 
         // skriver collision event til logfil.
-        private void Logwriter(object sender, CollisionArgs e)
+        public void Logwriter(object sender, CollisionArgs e)
         {
             var fly = e.Collision;
             Log.WriteLine(txt:"fly" + fly);

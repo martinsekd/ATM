@@ -8,7 +8,7 @@ namespace ATM.System
 {
     public sealed class ATM
     {
-        //private static readonly ATM instance = new ATM(new DataFormatter(), new FlightCalculator());
+        //private static readonly ATM instance = new ATM(new DataFormatter(TransponderArgs), new FlightCalculator());
         private FlightCollection flightCollection;
 
         static ATM()
@@ -29,9 +29,9 @@ namespace ATM.System
             }
 
             instance.flightCollection.notify();
-        }*/
+        }
 
-        /*public static ATM Instance
+        public static ATM Instance
         {
             get { return instance; }
         }*/

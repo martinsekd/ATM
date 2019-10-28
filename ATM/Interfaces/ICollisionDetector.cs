@@ -16,5 +16,7 @@ namespace ATM.System
     public interface ICollisionDetector
     {
         void DetectCollisions(List<Flight> flightList);
+
+        event EventHandler<CollisionArgs> NewCollision;
     }
 }

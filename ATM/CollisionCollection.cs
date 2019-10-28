@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework.Constraints;
 
@@ -6,7 +7,7 @@ namespace ATM.System
 {
     public class CollisionCollection: ICollisionCollection
     {
-        private List<Collision> collisions = new List<Collision>();
+        public List<Collision> Collisions { get; private set; } = new List<Collision>();
 
         public CollisionCollection()
         {
@@ -14,16 +15,16 @@ namespace ATM.System
 
         public CollisionCollection(List<Collision> collisions)
         {
-            this.collisions = collisions;
+            Collisions = collisions;
         }
 
         //Takes a new List of collisions, creates a list of collisions that are in the supplied list and not in the first
         //Sets the collection to the updated list and returns the new collisions
         public List<Collision> HandleUpdatedCollisions(List<Collision> updatedCollisions)
         {
-            List <Collision> newCollisions = collisions.Except(updatedCollisions).ToList();
+            List<Collision> newCollisions = updatedCollisions.Except(Collisions).ToList();
 
-            this.collisions = updatedCollisions;
+            Collisions = updatedCollisions;
 
             return newCollisions;
 

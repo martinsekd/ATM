@@ -9,25 +9,6 @@ namespace ATM.System
 {
     public class FlightCollection : IFlightCollection
     {
-        private bool seperation = false;
-        public void Seperation(TransponderData t1, TransponderData t2)
-        {
-            int deltaX = t1.X - t2.X;
-            int deltaY = t1.Y - t2.Y;
-
-            double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-            int altitudeDistance = Math.Abs(t1.Altitude - t2.Altitude);
-
-            if (altitudeDistance < 300 && distance < 5000)
-            {
-                seperation = true;
-            }
-            else
-            {
-                seperation = false;
-            }
-        }
-
         private List<Flight> FlightList;
 
         private IFlightCalculator flightCalculator;
@@ -89,11 +70,8 @@ namespace ATM.System
 
         public void Render()
         {
-            Console.Clear();
-            //Canvas.SetTop(Program.shape, 50);
-            //Canvas.SetLeft(Program.shape, 50);
-
-            //foreach (Flight f in FlightList)
+            
+            //Console.Clear();
             for(int i=0;i<FlightList.Count;i++)
             {
                 Flight f = FlightList[i];
@@ -101,7 +79,7 @@ namespace ATM.System
                 {
                     Program.setflight(f.TData.X / 200, f.TData.Y / 200,i);
                 }
-                Console.WriteLine("Flight: {0}, Position: {1}, {2}, Altitude: {3}, Speed: {4}, Direction {5}", f.TData.Tag, f.TData.X, f.TData.Y, f.TData.Altitude, f.Speed, f.Direction);
+                //Console.WriteLine("Flight: {0}, Position: {1}, {2}, Altitude: {3}, Speed: {4}, Direction {5}", f.TData.Tag, f.TData.X, f.TData.Y, f.TData.Altitude, f.Speed, f.Direction);
             }
         }
     }

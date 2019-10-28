@@ -49,5 +49,10 @@ namespace ATM.System
         {
             return string.Format(this.FlightA.TData.Tag + this.FlightB.TData.Tag).GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return "Collision between " + FlightA.TData.Tag + " and " + FlightB.TData.Tag + " at " + Time;
+        }
     }
 }

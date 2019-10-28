@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ATM.Interfaces;
 
 namespace ATM.System
 {
@@ -31,6 +32,9 @@ namespace ATM.System
             var rec = TransponderReceiver.TransponderReceiverFactory.CreateTransponderDataReceiver();
 
             IDataFormatter df = new DataFormatter(rec);
+            IFlightCollection flightCollection = new FlightCollection(new FlightCalculator(), df);
+            ICollisionDetector collisionDetector = new CollisionDetector(flightCollection, new CollisionCollection());
+            ILog logger = new Log(collisionDetector);
 
             //rec.TransponderDataReady += ATM.Receive;
             t.Join();
