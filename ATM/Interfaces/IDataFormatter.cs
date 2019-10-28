@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TransponderReceiver;
 
 namespace ATM.System
 {
@@ -12,6 +13,6 @@ namespace ATM.System
     {
         event EventHandler<TransponderArgs> transponderChanged;
 
-        TransponderData StringToTransponderData(string s);
+        void StringToTransponderData(object v, RawTransponderDataEventArgs rawTransponderDataEventArgs);
     }
 }

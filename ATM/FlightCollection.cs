@@ -21,7 +21,8 @@ namespace ATM.System
             flightFilter.transponderFilterChanged += getTransponderData;
             this.FlightList = new List<Flight>();
             this.flightCalculator = flightCalculator;
-            //this.dataFormatter = dataFormatter;
+
+            ICollisionDetector collisionDetector = new CollisionDetector(this, new CollisionCollection());
             render = new Render(this);
         }
 

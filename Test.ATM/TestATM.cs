@@ -102,27 +102,33 @@ namespace Test.ATM
         public void test3()
         {
             //arrange
+
             var fakeReceiver = Substitute.For<ITransponderReceiver>();
-            fakeDataFormatter = new DataFormatter(fakeReceiver);
+            //var fakeFilter = Substitute.For<IFlightFilter>();
+
+            var fakeDataFormatter = Substitute.For<IDataFormatter>();
+
+            fakeReceiver.TransponderDataReady += fakeDataFormatter.StringToTransponderData;
             List<string> flightList = new List<string>();
             TransponderArgs args = new TransponderArgs();
-
+            TransponderArgs receiveArgs = null;
+            
             //act
-            flightList.Add("TTT10;30;50;14000;20101006213456789");
+            flightList.Add("TTT10;20000;30000;14000;20101006213456789");
+            fakeReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs(flightList));
 
-            fakeReceiver.TransponderDataReady += Raise.EventWith(new RawTransponderDataEventArgs(flightList));
-
-            fakeDataFormatter.transponderChanged += (sender, arg) => {
+            /*fakeDataFormatter.transponderChanged += (sender, arg) => {
                 args.transponderData = arg.transponderData;
-            };
-
+            };*/
             
-            
+            fakeDataFormatter.Received(1).StringToTransponderData(Arg.Any<object>(),Arg.Is<RawTransponderDataEventArgs>(arg => arg.TransponderData.Contains("TTT10;20000;30000;14000;20101006213456789")));
+            //fakeDataFormatter.Received(1).StringToTransponderData(Arg.Any<object>(),Arg.Any<RawTransponderDataEventArgs>());
 
-
-            //assert
-
-            Assert.That(args.transponderData[0].X, expression: Is.EqualTo(30));
+            /*fakeFilter.transponderFilterChanged += (s, a) =>
+            {
+                receiveArgs = a;
+                //receiveArgs = a;
+            };*/
         }
 
         

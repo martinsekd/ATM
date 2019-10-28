@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TransponderReceiver;
 
 namespace ATM.System
 {
@@ -13,6 +14,11 @@ namespace ATM.System
             IFlightFilter flightFilter = new FlightFilter(this);
             transponderReceiver.TransponderDataReady += StringToTransponderData;
             
+        }
+
+        public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver, IFlightFilter flightFilter)
+        {
+            transponderReceiver.TransponderDataReady += StringToTransponderData;
         }
 
         public event EventHandler<TransponderArgs> transponderChanged;
@@ -44,9 +50,5 @@ namespace ATM.System
             OnTransponderChanged(new TransponderArgs { transponderData = transponderList });
         }
 
-        public TransponderData StringToTransponderData(string s)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

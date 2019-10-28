@@ -32,9 +32,8 @@ namespace ATM.System
 
             
             IDataFormatter df = new DataFormatter(rec);
-            IFlightCollection flightCollection = new FlightCollection(new FlightCalculator(), df);
-            ICollisionDetector collisionDetector = new CollisionDetector(flightCollection, new CollisionCollection());
-            ILog logger = new Log(collisionDetector);
+            //IFlightCollection flightCollection = new FlightCollection(new FlightCalculator(), df);
+            
 
             //rec.TransponderDataReady += ATM.Receive;
             t.Join();
