@@ -64,10 +64,12 @@
     <Compile Include="FlightCalculator.cs" />
     <Compile Include="FlightCollection.cs" />
     <Compile Include="DataFormatter.cs" />
+    <Compile Include="FlightFilter.cs" />
     <Compile Include="Interfaces\ICollisionCollection.cs" />
     <Compile Include="Interfaces\ICollisionDetector.cs" />
     <Compile Include="Interfaces\IDataFormatter.cs" />
     <Compile Include="Interfaces\IFlightCalculator.cs" />
+    <Compile Include="Interfaces\IFlightFilter.cs" />
     <Compile Include="Interfaces\IFlightCollection.cs" />
     <Compile Include="Interfaces\ILog.cs" />
     <Compile Include="InvalidInputException.cs" />

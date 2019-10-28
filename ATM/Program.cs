@@ -31,6 +31,7 @@ namespace ATM.System
             
             var rec = TransponderReceiver.TransponderReceiverFactory.CreateTransponderDataReceiver();
 
+            
             IDataFormatter df = new DataFormatter(rec);
             IFlightCollection flightCollection = new FlightCollection(new FlightCalculator(), df);
             ICollisionDetector collisionDetector = new CollisionDetector(flightCollection, new CollisionCollection());

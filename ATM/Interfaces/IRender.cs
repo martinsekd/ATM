@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ATM.System
 {
 
-    interface IRender
+    public interface IRender
     {
 
         void RenderFlights(object sender, FlightArgs e);

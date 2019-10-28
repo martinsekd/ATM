@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ATM.Interfaces;
 using ATM.System;
 using NUnit.Framework.Internal;
 
@@ -12,6 +11,16 @@ namespace ATM
 {
     public class Log : ILog
     {
+
+        public Log(CollisionDetector collisionDetector)
+        {
+            collisionDetector.newCollision += Logwriter;
+        }
+
+        public void newCollisionDetected(object sender, CollisionArgs e)
+        {
+
+        }
         // Fil angivelse på skrivebord.
         private static string LogFile =
             Environment.GetFolderPath(
@@ -35,6 +44,13 @@ namespace ATM
             var fly = e.Collision;
             Log.WriteLine(txt:"fly" + fly);
         }
+
+        void ILog.Logwriter(object sender, CollisionArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+
 
 
         /*public static bool WriteLog(string strFileName, string strMessage)

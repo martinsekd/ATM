@@ -8,9 +8,10 @@ namespace ATM.System
     public class CollisionCollection: ICollisionCollection
     {
         public List<Collision> Collisions { get; private set; } = new List<Collision>();
-
+        
         public CollisionCollection()
         {
+            
         }
 
         public CollisionCollection(List<Collision> collisions)
