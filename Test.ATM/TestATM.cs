@@ -115,6 +115,8 @@ namespace Test.ATM
             fakeDataFormatter.transponderChanged += (sender, arg) => {
                 args.transponderData = arg.transponderData;
             };
+
+            
             
 
 
