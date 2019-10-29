@@ -8,7 +8,7 @@ namespace ATM.System
 {
     public class FlightFilter : IFlightFilter
     {
-        private List<TransponderData> transponderListe;
+        public List<TransponderData> transponderListe {get; private set; }
         public FlightFilter(IDataFormatter dataFormatter)
         {
             FlightCollection flightCollection = new FlightCollection(new FlightCalculator(), this);

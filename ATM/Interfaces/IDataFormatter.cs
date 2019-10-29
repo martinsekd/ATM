@@ -12,7 +12,7 @@ namespace ATM.System
     public interface IDataFormatter
     {
         event EventHandler<TransponderArgs> transponderChanged;
-
+        
         void StringToTransponderData(object v, RawTransponderDataEventArgs rawTransponderDataEventArgs);
     }
 }
