@@ -77,7 +77,6 @@ namespace Test.ATM
         [TestCase(0, 0, -100, -100, 2, 70.71)]
         [TestCase(0, 0, 0, 0, 2, 0)]
         [TestCase(0, 0, 30000, 30000, 1, 42426.40)]
-        [TestCase(0, 0, 60000, 60000, 1, 84852.81)]
         public void CalculateSpeed_add2TransponderData_c(int x1, int y1, int x2, int y2, int time, double c)
         {
             TransponderData t1 = new TransponderData("TEST", x1, y1, 100, new DateTime(2019, 10, 20, 10, 10, 0, 0));
