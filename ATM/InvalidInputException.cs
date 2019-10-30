@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ATM.System
 {
-    class InvalidInputException: Exception
+    public class InvalidInputException: Exception
     {
         public InvalidInputException(string s): base(s)
         {

@@ -251,11 +251,31 @@ namespace Test.ATM
             
             //assert
             Assert.That(resultList[0].X, Is.EqualTo(b));
-            
-
-            //fakeFlightFilter.FilterFlight(Arg.Any<object>(), Arg.Is<TransponderArgs>(arg => arg.transponderData[0].X.Equals(20000)));
         }
 
+        [TestCase("TTT10;90001;30000;14000")]
+        [TestCase("TTT10;89999;30000;14000;20101006213456789;100")]
+        public void StringToTransponderData_addAWrongString_exception(string a)
+        {
+            //arrange
+            var stubReceiver = Substitute.For<ITransponderReceiver>();
+            var stubFlightFilter = Substitute.For<IFlightFilter>();
+
+            var uutDataFormatter = new DataFormatter(stubReceiver, stubFlightFilter);
+
+            
+            List<string> flightList = new List<string>();
+            flightList.Add(a);
+
+
+            //act
+
+            ;
+            //fakeDataFormatter.StringToTransponderData(this,new RawTransponderDataEventArgs(flightList));
+
+            //assert
+            Assert.That(()=>uutDataFormatter.StringToTransponderData(this, new RawTransponderDataEventArgs(flightList)), Throws.TypeOf<InvalidInputException>());
+        }
         #endregion
 
         #region Log

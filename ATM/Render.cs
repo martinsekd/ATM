@@ -40,10 +40,7 @@ namespace ATM.System
             
         }
 
-        protected virtual void OnTransponderChanged(FlightArgs e)
-        {
-            flightsChanged?.Invoke(this, e);
-        }
+        
 
         public event EventHandler<FlightArgs> flightsChanged;
     }
