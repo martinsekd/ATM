@@ -14,7 +14,7 @@ namespace ATM
 
         public Log(CollisionDetector collisionDetector)
         {
-            collisionDetector.newCollision += Logwriter;
+            collisionDetector.NewCollision += Logwriter;
         }
 
         public void newCollisionDetected(object sender, CollisionArgs e)
