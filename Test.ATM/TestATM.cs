@@ -38,26 +38,6 @@ namespace Test.ATM
             uut = new FlightCalculator();
         }
 
-        [Test]
-        public void something()
-        {
-            Assert.That(2 + 2, Is.EqualTo(4));
-        }
-
-        [Test]
-        public void something2()
-        {
-            test uut = new test();
-            Assert.That(uut.metodeA(), Is.EqualTo(true));
-        }
-
-        [Test]
-        public void something3()
-        {
-            test uut = new test();
-            Assert.That(uut.metodeB(), Is.EqualTo(true));
-        }
-
 
         #region flightCalculator
 
@@ -236,6 +216,7 @@ namespace Test.ATM
         #endregion
 
         #region Log
+        [TestFixture]
         public class LogUnitTest
         {
             private Log uut;
@@ -256,7 +237,10 @@ namespace Test.ATM
             [TearDown]
             public void TearDown()
             {
-
+                if (File.Exists(Log.LogFile))
+                {
+                    File.Delete(Log.LogFile);
+                }
             }
 
             [Test]
@@ -286,7 +270,6 @@ namespace Test.ATM
                     new CollisionArgs(new Collision(flightA, flightB)));
 
                 Assert.That(File.Exists(Log.LogFile));
-
             }
 
         }
