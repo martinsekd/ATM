@@ -6,12 +6,10 @@ namespace ATM.System
     {
         public Flight FlightA { get; private set; }
         public Flight FlightB { get; private set; }
-        public DateTime Time { get; private set; }
 
-        public Collision(Flight flightA, Flight flightB, DateTime time)
+        public Collision(Flight flightA, Flight flightB)
         {
             SetFlights(flightA, flightB);
-            Time = time;
         }
 
         //this method makes sure that two instances of Collision with FlightA and FlightB are created with opposite
@@ -52,7 +50,7 @@ namespace ATM.System
 
         public override string ToString()
         {
-            return "Collision between " + FlightA.TData.Tag + " and " + FlightB.TData.Tag + " at " + Time;
+            return "Collision between " + FlightA.TData.Tag + " and " + FlightB.TData.Tag;
         }
     }
 }

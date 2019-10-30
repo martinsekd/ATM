@@ -11,20 +11,15 @@ namespace ATM
 {
     public class Log : ILog
     {
+        // Fil angivelse på skrivebord.
+        public static string LogFile =
+            Environment.GetFolderPath(
+                Environment.SpecialFolder.Desktop) + "\\Log.txt";
 
         public Log(CollisionDetector collisionDetector)
         {
             collisionDetector.NewCollision += Logwriter;
         }
-
-        public void newCollisionDetected(object sender, CollisionArgs e)
-        {
-
-        }
-        // Fil angivelse på skrivebord.
-        private static string LogFile =
-            Environment.GetFolderPath(
-                Environment.SpecialFolder.Desktop) + "\\Log.txt";
 
         // tid + txt
 
@@ -32,43 +27,18 @@ namespace ATM
         {
             collisionDetector.NewCollision += Logwriter;
         }
-        public static void WriteLine(string txt)
-        {
-            File.AppendAllText(LogFile,
-                DateTime.Now.ToString() + ": " + txt);
-        }
 
-        // skriver collision event til logfil.
         public void Logwriter(object sender, CollisionArgs e)
         {
-            var fly = e.Collision;
-            Log.WriteLine(txt:"fly" + fly);
+            var col = e.Collision;
+
+            File.AppendAllText(LogFile, CollisionToLogString(col));
+            File.AppendAllText(LogFile, "\n");
         }
 
-        void ILog.Logwriter(object sender, CollisionArgs e)
+        public string CollisionToLogString(Collision collision)
         {
-            throw new NotImplementedException();
+            return DateTime.Now + ": " + collision.ToString();
         }
-
-
-
-
-        /*public static bool WriteLog(string strFileName, string strMessage)
-        {
-            try
-            {
-                FileStream objFilestream = new FileStream(string.Format("{0}\\{1}", Path.GetTempPath(), strFileName), FileMode.Append, FileAccess.Write);
-                StreamWriter objStreamWriter = new StreamWriter((Stream)objFilestream);
-                objStreamWriter.WriteLine(strMessage);
-                objStreamWriter.Close();
-                objFilestream.Close();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-            //Log.WriteLog("ConsoleLog.txt", String.Format("{0} @ {1}", "Log is Created by Martinique and Magnus the mosquito", DateTime.Now));
-        }*/
     }
 }
