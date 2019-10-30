@@ -128,7 +128,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void metodea()
+            public void RenderFlights_renderflighta_b()
             {
                 var stubFlightFilter = Substitute.For<IFlightFilter>();
                 var stubFlightCalculator = Substitute.For<IFlightCalculator>();
@@ -144,10 +144,16 @@ namespace Test.ATM
                 flight.Speed = 50;
 
                 flightliste.Add(flight);
-                stubFlightCollection.flightsChanged += (o, e) => { resultListe = e.flights;};
+
+                uutRender.flightsChanged += (o, e) => { resultListe = e.flights;};
+
+                //stubFlightCollection.flightsChanged += uutRender.RenderFlights;
+                //stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
+                uutRender.RenderFlights(this,new FlightArgs(){flights = flightliste});
+                //var arg = new FlightArgs {flights = flightliste};
                 
-                stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
-                stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
+                //stubFlightCollection.flightsChanged += Raise.Event(this, arg);
+                //stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
 
                 //stubConsole.Received(1).WriteLine(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<double>(), Arg.Any<double>());
                 Assert.That(resultListe[0],Is.EqualTo(flightliste[0]));

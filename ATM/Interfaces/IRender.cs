@@ -11,5 +11,6 @@ namespace ATM.System
     {
 
         void RenderFlights(object sender, FlightArgs e);
+        event EventHandler<FlightArgs> flightsChanged;
     }
 }
