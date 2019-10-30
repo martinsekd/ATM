@@ -136,7 +136,8 @@ namespace Test.ATM
             flightList.Add("TTT10;20000;30000;14000;20101006213456789");
 
             //act
-            stubReceiver.TransponderDataReady += mockDataFormatter.StringToTransponderData;
+            
+            //stubReceiver.TransponderDataReady += mockDataFormatter.StringToTransponderData;
             stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs(flightList));
 
             //assert
@@ -152,21 +153,26 @@ namespace Test.ATM
             var uutDataFormatter = new DataFormatter(stubReceiver,stubFlightFilter);
             var mockFlightFilter = Substitute.For<FlightFilter>(uutDataFormatter);
 
+            List<TransponderData> resultList = null;
 
             //var fakeDataFormatter = new DataFormatter(stubReceiver, MockFlightFilter);
 
-            List<TransponderData> transponderList = new List<TransponderData>();
-            TransponderData td = new TransponderData("TTT10",20000,30000,14000,new DateTime(2010,10,6,21,34,56,789));
-            transponderList.Add(td);
+            //List<string> flightList = new List<string>();
+            //flightList.Add(a);
+            //List<TransponderData> transponderList = new List<TransponderData>();
+            //TransponderData td = new TransponderData("TTT10",20000,30000,14000,new DateTime(2010,10,6,21,34,56,789));
+            //transponderList.Add(td);
 
             //act
-            uutDataFormatter.transponderChanged += mockFlightFilter.FilterFlight;
+            uutDataFormatter.transponderChanged += (o, e) => { resultList = e.transponderData; };
 
-            uutDataFormatter.transponderChanged += Raise.EventWith(this,new TransponderArgs{transponderData = transponderList});
+            // stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs());
 
+            //stubReceiver.
             //assert
-
-            mockFlightFilter.Received(1).FilterFlight(Arg.Any<object>(), Arg.Is<TransponderArgs>(arg => arg.transponderData.Contains(td)));
+            Assert.That(resultList[0].X,Is.EqualTo(20000));
+            
+            //mockFlightFilter.Received(1).FilterFlight(Arg.Any<object>(), Arg.Is<TransponderArgs>(arg => arg.transponderData.Contains(td)));
         }
 
         [TestCase("TTT10;10000;30000;14000;20101006213456789",10000)]
@@ -180,18 +186,20 @@ namespace Test.ATM
             //arrange
             var stubReceiver = Substitute.For<ITransponderReceiver>();
             var stubFlightFilter = Substitute.For<IFlightFilter>();
-            var fakeDataFormatter = new DataFormatter(stubReceiver,stubFlightFilter);
 
-            stubReceiver.TransponderDataReady += fakeDataFormatter.StringToTransponderData;
+            var uutDataFormatter = new DataFormatter(stubReceiver,stubFlightFilter);
+
+            stubReceiver.TransponderDataReady += uutDataFormatter.StringToTransponderData;
             List<string> flightList = new List<string>();
             flightList.Add(a);
-
+            List<TransponderData> resultList = null;
             //act
             stubReceiver.TransponderDataReady += Raise.EventWith(this, new RawTransponderDataEventArgs(flightList));
-            fakeDataFormatter.StringToTransponderData(this,new RawTransponderDataEventArgs(flightList));
+            uutDataFormatter.transponderChanged += (o, e) => { resultList = e.transponderData; };
+            //fakeDataFormatter.StringToTransponderData(this,new RawTransponderDataEventArgs(flightList));
             
             //assert
-            Assert.That(fakeDataFormatter.transponderList_[0].X, Is.EqualTo(b));
+            Assert.That(resultList[0].X, Is.EqualTo(b));
             
 
             //fakeFlightFilter.FilterFlight(Arg.Any<object>(), Arg.Is<TransponderArgs>(arg => arg.transponderData[0].X.Equals(20000)));

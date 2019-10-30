@@ -9,10 +9,11 @@ namespace ATM.System
 {
     public class DataFormatter: IDataFormatter
     {
-        public List<TransponderData> transponderList_ { get; private set; }
+        public List<TransponderData> transponderList_{ get; private set; }
 
         public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver)
         {
+            transponderList_ = null;
             IFlightFilter flightFilter = new FlightFilter(this);
             transponderReceiver.TransponderDataReady += StringToTransponderData;
             
