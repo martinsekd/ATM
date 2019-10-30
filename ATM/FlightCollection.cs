@@ -21,7 +21,8 @@ namespace ATM.System
             flightFilter.transponderFilterChanged += getTransponderData;
             this.FlightList = new List<Flight>();
             this.flightCalculator = flightCalculator;
-            //this.dataFormatter = dataFormatter;
+
+            ICollisionDetector collisionDetector = new CollisionDetector(this, new CollisionCollection());
             render = new Render(this);
         }
 
@@ -68,7 +69,7 @@ namespace ATM.System
             OnFlightsChanged(new FlightArgs() { flights = FlightList });
         }
 
-        public void Render()
+        /*public void Render()
         {
             
             //Console.Clear();
@@ -81,6 +82,6 @@ namespace ATM.System
                 }
                 //Console.WriteLine("Flight: {0}, Position: {1}, {2}, Altitude: {3}, Speed: {4}, Direction {5}", f.TData.Tag, f.TData.X, f.TData.Y, f.TData.Altitude, f.Speed, f.Direction);
             }
-        }
+        }*/
     }
 }

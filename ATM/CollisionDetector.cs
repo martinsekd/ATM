@@ -19,6 +19,8 @@ namespace ATM.System
         {
             flightCollection.flightsChanged += OnFlightsChanged;
             CollisionCollection = collisionCollection;
+
+            ILog logger = new Log(this);
         }
 
         public void OnFlightsChanged(object sender, FlightArgs e)
