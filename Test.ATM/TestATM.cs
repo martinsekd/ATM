@@ -77,6 +77,28 @@ namespace Test.ATM
 
         }
 
+        private double x = 60000;
+        private double y = 60000;
+        [TestCase(0, 0, 3, 4,1, 5)]
+        [TestCase(0, 0, 100, 100, 1, 141.42)]
+        [TestCase(0, 0, 100, 100, 2, 70.71)]
+        [TestCase(0, 0, -100, -100, 1, 141.42)]
+        [TestCase(0, 0, -100, -100, 2, 70.71)]
+        [TestCase(0, 0, 0, 0, 2, 0)]
+        [TestCase(0, 0, 30000, 30000, 1, 42426.40)]
+        [TestCase(0, 0, 60000, 60000, 1, 84852.81)]
+        public void CalculateSpeed_add2TransponderData_c(int x1, int y1, int x2, int y2, int time, double c)
+        {
+            TransponderData t1 = new TransponderData("TEST", x1, y1, 100, new DateTime(2019, 10, 20, 10, 10, 0, 0));
+            var t2 = new TransponderData("TEST1", x2, y2, 100, new DateTime(2019,10,20,10,10,time,0));
+
+            double degree = uut.CalculateSpeed(t1, t2);
+
+            Assert.That(degree, Is.InRange(c, c + 0.01));
+
+
+        }
+
         #endregion
 
         #region flightCollection
@@ -106,9 +128,9 @@ namespace Test.ATM
             //arrange
             var stubReceiver = Substitute.For<ITransponderReceiver>();
             var mockDataFormatter = Substitute.For<IDataFormatter>();
-            //var MockFlightFilter = Substitute.For<FlightFilter>(stubDataFormatter);
+            var uutDataFormatter = new DataFormatter(stubReceiver);
             
-            //var fakeDataFormatter = new DataFormatter(stubReceiver, MockFlightFilter);
+            
 
             List<string> flightList = new List<string>();
             flightList.Add("TTT10;20000;30000;14000;20101006213456789");
@@ -118,7 +140,6 @@ namespace Test.ATM
             stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs(flightList));
 
             //assert
-
             mockDataFormatter.Received(1).StringToTransponderData(Arg.Any<object>(),Arg.Is<RawTransponderDataEventArgs>(arg => arg.TransponderData.Contains("TTT10;20000;30000;14000;20101006213456789")));
         }
 
@@ -182,6 +203,24 @@ namespace Test.ATM
         #endregion
 
         #region flightFilter
+
+        [Test]
+        public void transponderFilterChanged_raiseEvent_FilterFlightCalled()
+        {
+            var stubCalculator = Substitute.For<IFlightCalculator>();
+            var mockFlightFilter = Substitute.For<FlightFilter>();
+            var stubDataFormatter = Substitute.For<IDataFormatter>();
+
+            IFlightCollection uutFlightCollection = new FlightCollection(stubCalculator,mockFlightFilter);
+
+            mockFlightFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs());
+
+            //stubDataFormatter.transponderChanged += Raise.EventWith(this, new TransponderArgs());
+
+
+
+
+        }
         #endregion
 
         #region collisionDetection

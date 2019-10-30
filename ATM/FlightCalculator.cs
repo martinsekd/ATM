@@ -14,7 +14,7 @@ namespace ATM.System
             int deltaX = oldData.X - newData.X;
             int deltaY = oldData.Y - newData.Y;
 
-            double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+            var distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
             TimeSpan timespan = newData.Time - oldData.Time;
             double timedif = timespan.TotalMilliseconds;
             return distance/(timedif/1000);
