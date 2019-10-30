@@ -1,12 +1,14 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ATM;
+using ATM.Interfaces;
 using ATM.System;
 using Castle.Core.Smtp;
 using NSubstitute;
@@ -124,6 +126,33 @@ namespace Test.ATM
             {
 
             }
+
+            [Test]
+            public void metodea()
+            {
+                var stubFlightFilter = Substitute.For<IFlightFilter>();
+                var stubFlightCalculator = Substitute.For<IFlightCalculator>();
+                var stubFlightCollection = Substitute.For<FlightCollection>(stubFlightCalculator,stubFlightFilter);
+                var stubConsole = Substitute.For<IConsole>();
+
+                var uutRender = new Render(stubFlightCollection,stubConsole);
+
+                List<Flight> resultListe = null;
+                List<Flight> flightliste = new List<Flight>();
+                var flight = new Flight(new TransponderData("TTT", 1, 1, 1, new DateTime(2017, 10, 5, 23, 10, 45, 666)));
+                flight.Direction = 100;
+                flight.Speed = 50;
+
+                flightliste.Add(flight);
+                stubFlightCollection.flightsChanged += (o, e) => { resultListe = e.flights;};
+                
+                stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
+                stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
+
+                //stubConsole.Received(1).WriteLine(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<double>(), Arg.Any<double>());
+                Assert.That(resultListe[0],Is.EqualTo(flightliste[0]));
+            }
+
         }
         #endregion
 

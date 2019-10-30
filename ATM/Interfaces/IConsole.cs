@@ -8,7 +8,7 @@ namespace ATM.Interfaces
 {
     public interface IConsole
     {
-        void WriteLine(string buffer);
+        void WriteLine(string Tag, int X, int Y, int Altitude, double Speed, double Direction);
         void Clear();
     }
 }

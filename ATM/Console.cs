@@ -9,9 +9,9 @@ namespace ATM
 {
     class Console : IConsole
     {
-        public void WriteLine(string buffer)
+        public void WriteLine(string Tag, int X, int Y, int Altitude, double Speed, double Direction)
         {
-            global::System.Console.WriteLine(buffer);
+            global::System.Console.WriteLine("Flight: {0}, Position: {1}, {2}, Altitude: {3}, Speed: {4}, Direction {5}", Tag, X, Y, Altitude, Speed, Direction);
         }
 
         public void Clear()
