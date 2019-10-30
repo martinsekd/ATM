@@ -284,7 +284,7 @@ namespace Test.ATM
         #endregion
 
         #region flightFilter
-
+        /*
         [Test]
         public void transponderFilterChanged_raiseEvent_FilterFlightCalled()
         {
@@ -297,11 +297,8 @@ namespace Test.ATM
             mockFlightFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs());
 
             //stubDataFormatter.transponderChanged += Raise.EventWith(this, new TransponderArgs());
-
-
-
-
         }
+        */
         public class FlightFilterUnitTest
         {
             [SetUp]
