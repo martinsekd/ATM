@@ -15,6 +15,11 @@ namespace ATM.System
             dataFormatter.transponderChanged += FilterFlight;
         }
 
+        public FlightFilter(IDataFormatter dataFormatter, IFlightCollection flightCollection)
+        {
+            dataFormatter.transponderChanged += FilterFlight;
+        }
+
         public event EventHandler<TransponderArgs> transponderFilterChanged;
 
         public void FilterFlight(object sender, TransponderArgs e)
