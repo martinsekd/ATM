@@ -18,10 +18,7 @@ namespace ATM.System
             List<Flight> flights = e.flights;
 
             Console.Clear();
-            //Canvas.SetTop(Program.shape, 50);
-            //Canvas.SetLeft(Program.shape, 50);
 
-            //foreach (Flight f in FlightList)
             for (int i = 0; i < flights.Count; i++)
             {
                 Flight f = flights[i];

@@ -37,10 +37,7 @@ namespace ATM.System
             ICollisionDetector collisionDetector = new CollisionDetector(flightCollection, new CollisionCollection());
             ILog logger = new Log(collisionDetector);
 
-            //rec.TransponderDataReady += ATM.Receive;
             t.Join();
-
-            //Log.WriteLog("ConsoleLog.txt", String.Format("{0} @ {1}", "Log is Created by Martinique and Magnus the mosquito", DateTime.Now));
 
             while (true)
             {

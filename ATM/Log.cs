@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ATM.System;
 using NUnit.Framework.Internal;
 
-namespace ATM
+namespace ATM.System
 {
     public class Log : ILog
     {
