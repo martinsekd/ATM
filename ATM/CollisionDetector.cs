@@ -48,7 +48,7 @@ namespace ATM.System
                 {
                     if (IsCollision(currentFlight, sortedFlights[j]))
                     {
-                        collisions.Add(new Collision(currentFlight, sortedFlights[j], DateTime.Now));
+                        collisions.Add(new Collision(currentFlight, sortedFlights[j]));
                     }
 
                     j++;

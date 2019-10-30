@@ -1,10 +1,12 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ATM;
 using ATM.System;
 using Castle.Core.Smtp;
 using NSubstitute;
@@ -234,6 +236,60 @@ namespace Test.ATM
         #endregion
 
         #region Log
+        public class LogUnitTest
+        {
+            private Log uut;
+            private ICollisionDetector _fakeCollisionDetector;
+            private CollisionArgs _receivedargs;
+            private int numberOfLogEvents;
+
+            [SetUp]
+            public void SetUp()
+            {
+                _fakeCollisionDetector = Substitute.For<ICollisionDetector>();
+                uut = new Log(_fakeCollisionDetector);
+
+                _receivedargs = null;
+                numberOfLogEvents = 0;
+            }
+
+            [TearDown]
+            public void TearDown()
+            {
+
+            }
+
+            [Test]
+            public void LoggerPrintsToLastLineOfLogFile()
+            {
+                Flight flightA = new Flight(new TransponderData("ABC123", 0, 0, 0, DateTime.Now));
+                Flight flightB = new Flight(new TransponderData("CAT234", 0, 0, 0, DateTime.Now));
+                Collision newCollision = new Collision(flightA,flightB);
+
+                _fakeCollisionDetector.NewCollision += Raise.EventWith(this,
+                    new CollisionArgs(new Collision(flightA, flightB)));
+
+                string lastLineInLog = File.ReadLines(Log.LogFile).Last();
+                string expectedText = uut.CollisionToLogString(newCollision);
+
+                Assert.That(lastLineInLog.Equals(expectedText));
+            }
+
+            [Test]
+            public void LoggerCreatesLogFile()
+            {
+                Flight flightA = new Flight(new TransponderData("ABC123", 0, 0, 0, DateTime.Now));
+                Flight flightB = new Flight(new TransponderData("CAT234", 0, 0, 0, DateTime.Now));
+                Collision newCollision = new Collision(flightA, flightB);
+
+                _fakeCollisionDetector.NewCollision += Raise.EventWith(this,
+                    new CollisionArgs(new Collision(flightA, flightB)));
+
+                Assert.That(File.Exists(Log.LogFile));
+
+            }
+
+        }
         #endregion
 
         #region flightFilter
