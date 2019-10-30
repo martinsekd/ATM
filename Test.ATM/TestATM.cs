@@ -342,7 +342,7 @@ namespace Test.ATM
             Assert.That(resultListe.Count,Is.EqualTo(number));
             //stubDataFormatter.transponderChanged += Raise.EventWith(this, new TransponderArgs());
         }
-        */
+        
         public class FlightFilterUnitTest
         {
             [SetUp]
