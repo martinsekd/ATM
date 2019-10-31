@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,11 +8,13 @@ using ATM.System;
 
 namespace ATM.System
 {
+    //Excluded from code coverage since stdout prints cannot be tested.
+    [ExcludeFromCodeCoverage]
     class Console : IConsole
     {
-        public void WriteLine(string Tag, int X, int Y, int Altitude, double Speed, double Direction)
+        public void WriteLine(string lineToWrite)
         {
-            global::System.Console.WriteLine("Flight: {0}\n\tPosition X:{1} Y:{2}\tAltitude: {3}\n\tSpeed: {4}\t\tDirection {5}\n", Tag, X, Y, Altitude, Speed, Direction);
+            global::System.Console.WriteLine(lineToWrite);
         }
 
         public void Clear()

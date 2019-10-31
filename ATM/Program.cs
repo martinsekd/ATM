@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,6 +13,8 @@ using TransponderReceiver;
 
 namespace ATM.System
 {
+    //Excluded from code coverage since we cannot test main.
+    [ExcludeFromCodeCoverage]
     public class Program : Application
     {
         private static Program gui;
@@ -34,7 +37,7 @@ namespace ATM.System
             ICollisionDetector collisionDetector = new CollisionDetector(flightCollection, new CollisionCollection());
             ILog logger = new Log(collisionDetector);
             IConsole console = new Console();
-            IRender render = new Render(flightCollection, console);
+            IRender render = new Render(flightCollection, console, true);
 
             t.Join();
 
