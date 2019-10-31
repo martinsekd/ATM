@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ATM.System;
 
-namespace ATM
+namespace ATM.System
 {
     class Console : IConsole
     {

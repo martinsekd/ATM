@@ -224,14 +224,11 @@ namespace Test.ATM
 
             //act
             uutDataFormatter.transponderChanged += (o, e) => { resultList = e.transponderData; };
+            //stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs());
 
-            // stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs());
-
-            //stubReceiver.
             //assert
             Assert.That(resultList[0].X,Is.EqualTo(20000));
-            
-            //mockFlightFilter.Received(1).FilterFlight(Arg.Any<object>(), Arg.Is<TransponderArgs>(arg => arg.transponderData.Contains(td)));
+
         }*/
 
 
