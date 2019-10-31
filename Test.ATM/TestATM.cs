@@ -70,12 +70,43 @@ namespace Test.ATM
         #endregion
 
         #region FlightCollection
+        [TestFixture]
         public class FlightCollectionUnitTest
         {
+            private IFlightCollection uut;
+            private IFlightCalculator fakeCalculator;
+            private IFlightFilter fakeFilter;
+            private FlightArgs receivedArgs;
+            private int numberOfFlightsChangedEvents;
+
             [SetUp]
             public void SetUp()
             {
+                fakeCalculator = Substitute.For<IFlightCalculator>();
+                fakeFilter = Substitute.For<IFlightFilter>();
 
+                uut = new FlightCollection(fakeCalculator, fakeFilter);
+
+                receivedArgs = null;
+                numberOfFlightsChangedEvents = 0;
+
+                uut.flightsChanged += (s, e) =>
+                {
+                    receivedArgs = e;
+                    numberOfFlightsChangedEvents++;
+                };
+            }
+
+            [Test]
+            public void FlightCollection_ReceivedEventRaisesEvent()
+            {
+                List<TransponderData> testList = new List<TransponderData>();
+                TransponderData testData = new TransponderData("TEST", 0, 0, 0, DateTime.Now);
+                testList.Add(testData);
+
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() {transponderData = testList});
+
+                Assert.That(numberOfFlightsChangedEvents, Is.EqualTo(1));
             }
         }
 
@@ -242,17 +273,12 @@ namespace Test.ATM
         {
             private Log uut;
             private ICollisionDetector _fakeCollisionDetector;
-            private CollisionArgs _receivedargs;
-            private int numberOfLogEvents;
 
             [SetUp]
             public void SetUp()
             {
                 _fakeCollisionDetector = Substitute.For<ICollisionDetector>();
                 uut = new Log(_fakeCollisionDetector);
-
-                _receivedargs = null;
-                numberOfLogEvents = 0;
             }
 
             [TearDown]
@@ -469,7 +495,6 @@ namespace Test.ATM
                     receivedArgs = a;
                     numberOfCollisionEvents++;
                 };
-
             }
 
             [Test]
