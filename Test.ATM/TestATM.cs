@@ -215,6 +215,7 @@ namespace Test.ATM
                 var stubConsole = Substitute.For<IConsole>();
 
                 var uutRender = new Render(stubFlightCollection,stubConsole);
+                uutRender.underTest = true;
 
                 List<Flight> resultListe = null;
                 List<Flight> flightliste = new List<Flight>();
