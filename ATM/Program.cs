@@ -14,7 +14,7 @@ using TransponderReceiver;
 namespace ATM.System
 {
     //Excluded from code coverage since we cannot test main.
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverageAttribute]
     public class Program : Application
     {
         private static Program gui;

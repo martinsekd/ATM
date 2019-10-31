@@ -17,7 +17,6 @@ namespace ATM.System
             renderInGui_ = renderInGui;
             console_ = console;
             col.flightsChanged += RenderFlights;
-            
         }
 
 
