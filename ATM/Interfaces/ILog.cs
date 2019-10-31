@@ -7,10 +7,6 @@ using ATM.System;
 
 namespace ATM.System
 {
-    /*class logger
-    {
-        public void Writelog(string strFileName, string strMessage) { }
-    }*/
     public interface ILog
     {
         void Logwriter(object sender, CollisionArgs e);
