@@ -21,6 +21,9 @@
       </FilterEntry>
     </ExcludeFilters>
   </Filters>
+    <AttributeFilters>
+    <AttributeFilterEntry>*ExcludeFromCodeCoverageAttribute</AttributeFilterEntry>
+  </AttributeFilters>
   <!-- Attribute filters. It's possible to use asterisks as wildcard symbols.
   <AttributeFilters>
     <AttributeFilterEntry>...</AttributeFilterEntry>
