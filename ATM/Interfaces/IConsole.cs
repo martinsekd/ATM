@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ATM.Interfaces
+namespace ATM.System
 {
     public interface IConsole
     {

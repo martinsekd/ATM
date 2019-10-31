@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using TransponderReceiver;
 
 namespace ATM.System
 {
@@ -21,13 +22,19 @@ namespace ATM.System
         [STAThread]
         static void Main(string[] args)
         {
-            
-            
             Thread t = new Thread(guimetode);
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
-            
-            ATM atm = new ATM();
+
+            ITransponderReceiver receiver = TransponderReceiver.TransponderReceiverFactory.CreateTransponderDataReceiver();
+
+            IDataFormatter dataFormatter = new DataFormatter(receiver);
+            IFlightFilter flightFilter = new FlightFilter(dataFormatter);
+            IFlightCollection flightCollection = new FlightCollection(new FlightCalculator(), flightFilter);
+            ICollisionDetector collisionDetector = new CollisionDetector(flightCollection, new CollisionCollection());
+            ILog logger = new Log(collisionDetector);
+            IConsole console = new Console();
+            IRender render = new Render(flightCollection, console);
 
             t.Join();
 

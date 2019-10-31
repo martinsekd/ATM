@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ATM;
-using ATM.Interfaces;
 using ATM.System;
 using Castle.Core.Smtp;
 using NSubstitute;
