@@ -377,6 +377,41 @@ namespace Test.ATM
         }
         #endregion
 
+        #region Collision
+
+        public class CollisionUnitTest
+        {
+            [SetUp]
+            public void SetUp()
+            {
+
+            }
+
+            [TestCase("ABC", "DEF", "ABC", "DEF", true)]
+            [TestCase("ABC", "DEF", "DEF", "ABC", true)]
+            [TestCase("DEF", "ABC", "ABC", "DEF", true)]
+            [TestCase("DEF", "ABC", "DEF", "ABC", true)]
+            [TestCase("ABC", "DEF", "ABC", "123", false)]
+            [TestCase("ABC", "DEF", "123", "DEF", false)]
+            [TestCase("ABC", "123", "ABC", "DEF", false)]
+            [TestCase("123", "DEF", "ABC", "DEF", false)]
+            public void Collision_CompareCollisionWithTagsAandBToCollisionWithTagCandD_expected(string tagA, string tagB, string tagC, string tagD, bool expected)
+            {
+                TransponderData dataA = new TransponderData(tagA, 0, 0, 0, DateTime.Now);
+                TransponderData dataB = new TransponderData(tagB, 0, 0, 0, DateTime.Now);
+                TransponderData dataC = new TransponderData(tagC, 0, 0, 0, DateTime.Now);
+                TransponderData dataD = new TransponderData(tagD, 0, 0, 0, DateTime.Now);
+                
+                Collision collisionA = new Collision(new Flight(dataA),new Flight(dataB));
+                Collision collisionB = new Collision(new Flight(dataC),new Flight(dataD));
+
+                bool compare = collisionA.Equals(collisionB);
+
+                Assert.That(compare, Is.EqualTo(expected));
+            }
+        }
+        #endregion
+
         #region CollisionCollection
         public class CollisionCollectionUnitTest
         {
