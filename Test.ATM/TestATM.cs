@@ -241,6 +241,7 @@ namespace Test.ATM
             [Test]
             public void event_raisedevent_rasied()
             {
+                //arrange
                 var stubFlightCollection = Substitute.For<IFlightCollection>();
                 var stubConsole = Substitute.For<IConsole>();
                 var uutRender = new Render(stubFlightCollection, stubConsole, false);
@@ -256,7 +257,8 @@ namespace Test.ATM
 
                 uutRender.flightsChanged += (o, e) => { resultListe = e.flights; };
                 stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
-
+                
+                //assert
                 Assert.That(resultListe[0],Is.EqualTo(flightliste[0]));
             }
 
@@ -314,9 +316,7 @@ namespace Test.ATM
                 List<string> flightList = new List<string>();
                 flightList.Add(a);
 
-                //act
-
-                //assert
+                //act and assert
                 Assert.That(() => uut.StringToTransponderData(this, new RawTransponderDataEventArgs(flightList)), Throws.TypeOf<InvalidInputException>());
             }
         }
