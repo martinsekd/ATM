@@ -21,13 +21,7 @@ namespace ATM.System
 
         private bool Equals(Flight compare)
         {
-            if (this.TData.Tag == compare.TData.Tag &&
-                this.TData.X == compare.TData.X &&
-                this.TData.Y == compare.TData.Y &&
-                this.TData.Altitude == compare.TData.Y &&
-                this.TData.Time == compare.TData.Time &&
-                this.Speed.Equals(compare.Speed) &&
-                this.Direction.Equals(compare.Direction))
+            if (this.TData.Tag == compare.TData.Tag)
             {
                 return true;
             }

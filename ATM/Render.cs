@@ -14,9 +14,10 @@ namespace ATM.System
 
         public Render(IFlightCollection col,IConsole console,bool renderInGui)
         {
-            console_ = console;
+            this.console_ = console;
+            this.renderInGui = renderInGui;
+
             col.flightsChanged += RenderFlights;
-            
         }
 
 
