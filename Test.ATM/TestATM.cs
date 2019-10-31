@@ -27,18 +27,22 @@ namespace Test.ATM
             [Test]
             public void Flight_CompareTwoFlights_ExpectTrue()
             {
+                //arrange and act
                 Flight flightA = new Flight(new TransponderData("TEST", 0, 0, 0, DateTime.Now));
                 Flight flightB = new Flight(new TransponderData("TEST", 0, 0, 0, DateTime.Now));
 
+                //assert
                 Assert.That(flightA.Equals(flightB), Is.True);
             }
 
             [Test]
             public void Flight_CompareTwoFlights_ExpectFalse()
             {
+                //arrange and act
                 Flight flightA = new Flight(new TransponderData("TEST", 0, 0, 0, DateTime.Now));
                 Flight flightB = new Flight(new TransponderData("BEST", 100, 110, 110, DateTime.Now));
 
+                //assert
                 Assert.That(flightA.Equals(flightB), Is.False);
             }
         }
@@ -54,6 +58,7 @@ namespace Test.ATM
             [SetUp]
             public void setUp()
             {
+                //arrange
                 uut = new FlightCalculator();
             }
 
@@ -66,11 +71,14 @@ namespace Test.ATM
             [TestCase(0, 0, -1, -100, 180.57)]
             public void CalculateDirection_add2TransponderData_c(int x1, int y1, int x2, int y2, double c)
             {
+                //arrange
                 TransponderData t1 = new TransponderData("TEST", x1, y1, 100, new DateTime());
                 TransponderData t2 = new TransponderData("TEST1", x2, y2, 100, new DateTime());
 
+                //act
                 double degree = uut.CalculateDirection(t1, t2);
 
+                //assert
                 Assert.That(degree, Is.InRange(c, c + 0.01));
             }
 
@@ -83,11 +91,14 @@ namespace Test.ATM
             [TestCase(0, 0, 30000, 30000, 1, 42426.40)]
             public void CalculateSpeed_add2TransponderData_c(int x1, int y1, int x2, int y2, int time, double c)
             {
+                //arrange
                 TransponderData t1 = new TransponderData("TEST1", x1, y1, 100, new DateTime(2019, 10, 20, 10, 10, 0, 0));
                 var t2 = new TransponderData("TEST2", x2, y2, 100, new DateTime(2019, 10, 20, 10, 10, time, 0));
 
+                //act
                 double degree = uut.CalculateSpeed(t1, t2);
 
+                //assert
                 Assert.That(degree, Is.InRange(c, c + 0.01));
             }
 
@@ -125,6 +136,7 @@ namespace Test.ATM
             [SetUp]
             public void SetUp()
             {
+                //arrange
                 stubCalculator = new StubCalculator();
                 fakeFilter = Substitute.For<IFlightFilter>();
 
@@ -143,39 +155,48 @@ namespace Test.ATM
             [Test]
             public void FlightCollection_ReceiveData_RaisesEvent()
             {
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>();
                 TransponderData testData = new TransponderData("TEST", 0, 0, 0, DateTime.Now);
                 testList.Add(testData);
 
+                //act
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
+                //assert
                 Assert.That(numberOfFlightsChangedEvents, Is.EqualTo(1));
             }
 
             [Test]
             public void FlightCollection_ReceiveData_RaiseEventWithExpectedContent()
             {
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>();
                 TransponderData testData = new TransponderData("TEST", 0, 0, 0, DateTime.Now);
                 testList.Add(testData);
                 Flight expectedFlight = new Flight(testData);
 
+                //act
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
+                //assert
                 Assert.That(receivedArgs.flights[0].Equals(expectedFlight),Is.True);
             }
 
             [Test]
             public void FlightCollection_ReceiveSameDataTwice_SpeedAndDirectionSet()
             {
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>()
                 {
                     new TransponderData("TEST", 0, 0, 0, DateTime.Now)
                 };
 
+                //act
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
+                //assert
                 Assert.That(receivedArgs.flights[0].Speed, Is.EqualTo(5));
                 Assert.That(receivedArgs.flights[0].Direction, Is.EqualTo(5));
             }
@@ -183,6 +204,7 @@ namespace Test.ATM
             [Test]
             public void FlightCollection_ReceiveMultipleFlights_RaisedEventContainsNoDuplicates()
             {
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>()
                 {
                     new TransponderData("TEST", 0, 0, 0, DateTime.Now),
@@ -190,8 +212,10 @@ namespace Test.ATM
                     new TransponderData("OTHERTEST", 0, 0, 0, DateTime.Now)
                 };
 
+                //act
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
+                //assert
                 Assert.That(receivedArgs.flights.Count, Is.EqualTo(2));
             }
 
@@ -238,6 +262,7 @@ namespace Test.ATM
             [Test]
             public void RenderFlights_renderflighta_b()
             {
+                //arrange
                 var stubFlightFilter = Substitute.For<IFlightFilter>();
                 var stubFlightCalculator = Substitute.For<IFlightCalculator>();
                 var stubFlightCollection = Substitute.For<FlightCollection>(stubFlightCalculator,stubFlightFilter);
@@ -255,21 +280,17 @@ namespace Test.ATM
 
                 uutRender.flightsChanged += (o, e) => { resultListe = e.flights;};
 
-                //stubFlightCollection.flightsChanged += uutRender.RenderFlights;
-                //stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
+                //act
                 uutRender.RenderFlights(this,new FlightArgs(){flights = flightliste});
-                //var arg = new FlightArgs {flights = flightliste};
-                
-                //stubFlightCollection.flightsChanged += Raise.Event(this, arg);
-                //stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
 
-                //stubConsole.Received(1).WriteLine(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<double>(), Arg.Any<double>());
+                //assert
                 Assert.That(resultListe[0],Is.EqualTo(flightliste[0]));
             }
 
             [Test]
             public void event_raisedevent_rasied()
             {
+                //arrange
                 var stubFlightCollection = Substitute.For<IFlightCollection>();
                 var stubConsole = Substitute.For<IConsole>();
                 var uutRender = new Render(stubFlightCollection, stubConsole, false);
@@ -283,9 +304,11 @@ namespace Test.ATM
 
                 flightliste.Add(flight);
 
+                //act
                 uutRender.flightsChanged += (o, e) => { resultListe = e.flights; };
                 stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
-
+                
+                //assert
                 Assert.That(resultListe[0],Is.EqualTo(flightliste[0]));
             }
 
@@ -343,9 +366,7 @@ namespace Test.ATM
                 List<string> flightList = new List<string>();
                 flightList.Add(a);
 
-                //act
-
-                //assert
+                //act and assert
                 Assert.That(() => uut.StringToTransponderData(this, new RawTransponderDataEventArgs(flightList)), Throws.TypeOf<InvalidInputException>());
             }
         }
