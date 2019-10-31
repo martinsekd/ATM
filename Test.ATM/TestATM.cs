@@ -169,7 +169,7 @@ namespace Test.ATM
                 fakeReceiver = Substitute.For<ITransponderReceiver>();
                 fakeFilter = Substitute.For<IFlightFilter>();
 
-                uut = new DataFormatter(fakeReceiver, fakeFilter);
+                uut = new DataFormatter(fakeReceiver);
             }
 
             [TestCase("TTT10;10000;30000;14000;20101006213456789", 10000)]
@@ -335,11 +335,11 @@ namespace Test.ATM
                 fakeDataFormatter = Substitute.For<IDataFormatter>();
                 fakeFlightCollection = Substitute.For<IFlightCollection>();
 
-                uut = new FlightFilter(fakeDataFormatter, fakeFlightCollection);
+                uut = new FlightFilter(fakeDataFormatter);
 
                 var mockDataFormatter = Substitute.For<IDataFormatter>();
                 var stubFlightCollection = Substitute.For<IFlightCollection>();
-                IFlightFilter uutFlightFilter = new FlightFilter(mockDataFormatter, stubFlightCollection);
+                IFlightFilter uutFlightFilter = new FlightFilter(mockDataFormatter);
             }
 
 
