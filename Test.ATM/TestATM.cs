@@ -18,80 +18,57 @@ namespace Test.ATM
     [TestFixture]
     public class TestATM
     {
-
-        //FAKES
-        private ICollisionDetector fakeCollisionDetector;
-        private IDataFormatter fakeDataFormatter;
-        private IFlightCalculator fakeFlightCalculator;
-        private IFlightCollection fakeFlightCollection;
-        private IFlightFilter fakeFlightFilter;
-        private ILog fakeLog;
-        private IRender fakeRender;
-
-
-        private FlightCalculator uut;
-        private FlightCollection flightCollection;
-
-        [SetUp]
-        public void setUp()
-        {
-            uut = new FlightCalculator();
-        }
-
-
-        #region flightCalculator
+        #region FlightCalculator
 
         public class FlightCalculatorUnitTest
         {
+            private FlightCalculator uut;
+
             [SetUp]
-            public void SetUp()
+            public void setUp()
             {
-
+                uut = new FlightCalculator();
             }
-        }
-        [TestCase(10, 40, 70, -100, 156.80)]
-        [TestCase(10, 40, 10, 80, 0)]
-        [TestCase(10, 40, 10, 10, 180)]
-        [TestCase(10, 40, 10, 40, 0)]
-        [TestCase(10, 100, 11, 10, 179.36)]
-        [TestCase(10, 100, 11, 200, 0.57)]
-        [TestCase(0, 0, -1, -100, 180.57)]
-        public void CalculateDirection_add2TransponderData_c(int x1, int y1, int x2, int y2, double c)
-        {
-            TransponderData t1 = new TransponderData("TEST", x1, y1, 100, new DateTime());
-            var t2 = new TransponderData("TEST1", x2, y2, 100, new DateTime());
 
-            double degree = uut.CalculateDirection(t1, t2);
+            [TestCase(10, 40, 70, -100, 156.80)]
+            [TestCase(10, 40, 10, 80, 0)]
+            [TestCase(10, 40, 10, 10, 180)]
+            [TestCase(10, 40, 10, 40, 0)]
+            [TestCase(10, 100, 11, 10, 179.36)]
+            [TestCase(10, 100, 11, 200, 0.57)]
+            [TestCase(0, 0, -1, -100, 180.57)]
+            public void CalculateDirection_add2TransponderData_c(int x1, int y1, int x2, int y2, double c)
+            {
+                TransponderData t1 = new TransponderData("TEST", x1, y1, 100, new DateTime());
+                TransponderData t2 = new TransponderData("TEST1", x2, y2, 100, new DateTime());
 
-            Assert.That(degree, Is.InRange(c, c + 0.01));
+                double degree = uut.CalculateDirection(t1, t2);
 
+                Assert.That(degree, Is.InRange(c, c + 0.01));
+            }
 
-        }
+            [TestCase(0, 0, 3, 4, 1, 5)]
+            [TestCase(0, 0, 100, 100, 1, 141.42)]
+            [TestCase(0, 0, 100, 100, 2, 70.71)]
+            [TestCase(0, 0, -100, -100, 1, 141.42)]
+            [TestCase(0, 0, -100, -100, 2, 70.71)]
+            [TestCase(0, 0, 0, 0, 2, 0)]
+            [TestCase(0, 0, 30000, 30000, 1, 42426.40)]
+            public void CalculateSpeed_add2TransponderData_c(int x1, int y1, int x2, int y2, int time, double c)
+            {
+                TransponderData t1 = new TransponderData("TEST1", x1, y1, 100, new DateTime(2019, 10, 20, 10, 10, 0, 0));
+                var t2 = new TransponderData("TEST2", x2, y2, 100, new DateTime(2019, 10, 20, 10, 10, time, 0));
 
-        private double x = 60000;
-        private double y = 60000;
-        [TestCase(0, 0, 3, 4,1, 5)]
-        [TestCase(0, 0, 100, 100, 1, 141.42)]
-        [TestCase(0, 0, 100, 100, 2, 70.71)]
-        [TestCase(0, 0, -100, -100, 1, 141.42)]
-        [TestCase(0, 0, -100, -100, 2, 70.71)]
-        [TestCase(0, 0, 0, 0, 2, 0)]
-        [TestCase(0, 0, 30000, 30000, 1, 42426.40)]
-        public void CalculateSpeed_add2TransponderData_c(int x1, int y1, int x2, int y2, int time, double c)
-        {
-            TransponderData t1 = new TransponderData("TEST", x1, y1, 100, new DateTime(2019, 10, 20, 10, 10, 0, 0));
-            var t2 = new TransponderData("TEST1", x2, y2, 100, new DateTime(2019,10,20,10,10,time,0));
+                double degree = uut.CalculateSpeed(t1, t2);
 
-            double degree = uut.CalculateSpeed(t1, t2);
-
-            Assert.That(degree, Is.InRange(c, c + 0.01));
-
+                Assert.That(degree, Is.InRange(c, c + 0.01));
+            }
 
         }
 
         #endregion
 
-        #region flightCollection
+        #region FlightCollection
         public class FlightCollectionUnitTest
         {
             [SetUp]
@@ -99,19 +76,6 @@ namespace Test.ATM
             {
 
             }
-        }
-        [Test]
-        public void tester()
-        {
-            //arrange
-            fakeFlightCalculator = Substitute.For<IFlightCalculator>();
-            fakeFlightFilter = Substitute.For<IFlightFilter>();
-            flightCollection = new FlightCollection(fakeFlightCalculator, fakeFlightFilter);
-
-            //act
-
-            //assert
-
         }
 
         #endregion
@@ -130,10 +94,42 @@ namespace Test.ATM
         #region DataFormatter
         public class DataFormatterUnitTest
         {
+            private DataFormatter uut;
+            private ITransponderReceiver fakeReceiver;
+            private IFlightFilter fakeFilter;
+
             [SetUp]
             public void SetUp()
             {
+                fakeReceiver = Substitute.For<ITransponderReceiver>();
+                fakeFilter = Substitute.For<IFlightFilter>();
 
+                uut = new DataFormatter(fakeReceiver, fakeFilter);
+            }
+
+            [TestCase("TTT10;10000;30000;14000;20101006213456789", 10000)]
+            [TestCase("TTT10;10001;30000;14000;20101006213456789", 10001)]
+            [TestCase("TTT10;9999;30000;14000;20101006213456789", 9999)]
+            [TestCase("TTT10;90000;30000;14000;20101006213456789", 90000)]
+            [TestCase("TTT10;90001;30000;14000;20101006213456789", 90001)]
+            [TestCase("TTT10;89999;30000;14000;20101006213456789", 89999)]
+            public void StringToTransponderData_addStringaToGetXKoor_b(string a, int b)
+            {
+                //Arrange
+                List<string> flightList = new List<string>();
+                flightList.Add(a);
+
+                List<TransponderData> resultList = null;
+
+                fakeReceiver.TransponderDataReady += uut.StringToTransponderData;
+
+                uut.transponderChanged += (o, e) => { resultList = e.transponderData; };
+
+                //Act
+                fakeReceiver.TransponderDataReady += Raise.EventWith(this, new RawTransponderDataEventArgs(flightList));
+
+                //Assert
+                Assert.That(resultList[0].X, Is.EqualTo(b));
             }
         }
 
@@ -190,36 +186,7 @@ namespace Test.ATM
             //mockFlightFilter.Received(1).FilterFlight(Arg.Any<object>(), Arg.Is<TransponderArgs>(arg => arg.transponderData.Contains(td)));
         }*/
 
-        [TestCase("TTT10;10000;30000;14000;20101006213456789",10000)]
-        [TestCase("TTT10;10001;30000;14000;20101006213456789", 10001)]
-        [TestCase("TTT10;9999;30000;14000;20101006213456789", 9999)]
-        [TestCase("TTT10;90000;30000;14000;20101006213456789", 90000)]
-        [TestCase("TTT10;90001;30000;14000;20101006213456789", 90001)]
-        [TestCase("TTT10;89999;30000;14000;20101006213456789", 89999)]
-        public void StringToTransponderData_addStringaToGetXKoor_b(string a, int b)
-        {
-            //arrange
-            var stubReceiver = Substitute.For<ITransponderReceiver>();
-            var stubFlightFilter = Substitute.For<IFlightFilter>();
 
-            var uutDataFormatter = new DataFormatter(stubReceiver,stubFlightFilter);
-
-            stubReceiver.TransponderDataReady += uutDataFormatter.StringToTransponderData;
-            List<string> flightList = new List<string>();
-            flightList.Add(a);
-            List<TransponderData> resultList = null;
-            uutDataFormatter.transponderChanged += (o, e) => { resultList = e.transponderData; };
-            //act
-            stubReceiver.TransponderDataReady += Raise.EventWith(this, new RawTransponderDataEventArgs(flightList));
-            
-            //fakeDataFormatter.StringToTransponderData(this,new RawTransponderDataEventArgs(flightList));
-            
-            //assert
-            Assert.That(resultList[0].X, Is.EqualTo(b));
-            
-
-            //fakeFlightFilter.FilterFlight(Arg.Any<object>(), Arg.Is<TransponderArgs>(arg => arg.transponderData[0].X.Equals(20000)));
-        }
 
         #endregion
 
@@ -283,7 +250,7 @@ namespace Test.ATM
         }
         #endregion
 
-        #region flightFilter
+        #region FlightFilter
         /*
         [Test]
         public void transponderFilterChanged_raiseEvent_FilterFlightCalled()
@@ -309,7 +276,42 @@ namespace Test.ATM
         }
         #endregion
 
-        #region collisionDetector
+        #region CollisionCollection
+        public class CollisionCollectionUnitTest
+        {
+            [SetUp]
+            public void SetUp()
+            {
+
+            }
+
+            [Test]
+            public void DefaultConstructorListIsEmpty()
+            {
+                CollisionCollection uut = new CollisionCollection();
+
+                Assert.That(uut.Collisions.Count,Is.Zero);
+            }
+
+            [Test]
+            public void ListConstructorListNotEmpty()
+            {
+                TransponderData dummyData = new TransponderData("ABC123", 5000, 5000, 5000, DateTime.Now);
+                Flight flightA = new Flight(dummyData);
+                Flight flightB = new Flight(dummyData);
+                Collision testCollision = new Collision(flightA,flightB);
+                List<Collision> testList = new List<Collision>();
+                testList.Add(testCollision);
+                testList.Add(testCollision);
+                testList.Add(testCollision);
+                CollisionCollection uut = new CollisionCollection(testList);
+
+                Assert.That(uut.Collisions.Count,Is.GreaterThan(0));
+            }
+        }
+        #endregion
+
+        #region CollisionDetector
         [TestFixture]
         public class CollisionDetectorUnitTest
         {
@@ -461,7 +463,5 @@ namespace Test.ATM
             }
         }
         #endregion
-
-
     }
 }
