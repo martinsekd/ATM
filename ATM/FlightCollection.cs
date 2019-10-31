@@ -23,7 +23,7 @@ namespace ATM.System
             this.flightCalculator = flightCalculator;
 
             ICollisionDetector collisionDetector = new CollisionDetector(this, new CollisionCollection());
-            render = new Render(this);
+            render = new Render(this,new Console());
         }
 
         public void getTransponderData(object sender,TransponderArgs e)

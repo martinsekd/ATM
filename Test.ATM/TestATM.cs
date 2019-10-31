@@ -1,12 +1,14 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ATM;
+using ATM.Interfaces;
 using ATM.System;
 using Castle.Core.Smtp;
 using NSubstitute;
@@ -88,6 +90,39 @@ namespace Test.ATM
             {
 
             }
+
+            [Test]
+            public void RenderFlights_renderflighta_b()
+            {
+                var stubFlightFilter = Substitute.For<IFlightFilter>();
+                var stubFlightCalculator = Substitute.For<IFlightCalculator>();
+                var stubFlightCollection = Substitute.For<FlightCollection>(stubFlightCalculator,stubFlightFilter);
+                var stubConsole = Substitute.For<IConsole>();
+
+                var uutRender = new Render(stubFlightCollection,stubConsole);
+
+                List<Flight> resultListe = null;
+                List<Flight> flightliste = new List<Flight>();
+                var flight = new Flight(new TransponderData("TTT", 1, 1, 1, new DateTime(2017, 10, 5, 23, 10, 45, 666)));
+                flight.Direction = 100;
+                flight.Speed = 50;
+
+                flightliste.Add(flight);
+
+                uutRender.flightsChanged += (o, e) => { resultListe = e.flights;};
+
+                //stubFlightCollection.flightsChanged += uutRender.RenderFlights;
+                //stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
+                uutRender.RenderFlights(this,new FlightArgs(){flights = flightliste});
+                //var arg = new FlightArgs {flights = flightliste};
+                
+                //stubFlightCollection.flightsChanged += Raise.Event(this, arg);
+                //stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
+
+                //stubConsole.Received(1).WriteLine(Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<int>(), Arg.Any<double>(), Arg.Any<double>());
+                Assert.That(resultListe[0],Is.EqualTo(flightliste[0]));
+            }
+
         }
         #endregion
 
@@ -188,6 +223,43 @@ namespace Test.ATM
 
 
 
+            stubReceiver.TransponderDataReady += uutDataFormatter.StringToTransponderData;
+            List<string> flightList = new List<string>();
+            flightList.Add(a);
+            List<TransponderData> resultList = null;
+            uutDataFormatter.transponderChanged += (o, e) => { resultList = e.transponderData; };
+            //act
+            stubReceiver.TransponderDataReady += Raise.EventWith(this, new RawTransponderDataEventArgs(flightList));
+            
+            //fakeDataFormatter.StringToTransponderData(this,new RawTransponderDataEventArgs(flightList));
+            
+            //assert
+            Assert.That(resultList[0].X, Is.EqualTo(b));
+        }
+
+        [TestCase("TTT10;90001;30000;14000")]
+        [TestCase("TTT10;89999;30000;14000;20101006213456789;100")]
+        public void StringToTransponderData_addAWrongString_exception(string a)
+        {
+            //arrange
+            var stubReceiver = Substitute.For<ITransponderReceiver>();
+            var stubFlightFilter = Substitute.For<IFlightFilter>();
+
+            var uutDataFormatter = new DataFormatter(stubReceiver, stubFlightFilter);
+
+            
+            List<string> flightList = new List<string>();
+            flightList.Add(a);
+
+
+            //act
+
+            ;
+            //fakeDataFormatter.StringToTransponderData(this,new RawTransponderDataEventArgs(flightList));
+
+            //assert
+            Assert.That(()=>uutDataFormatter.StringToTransponderData(this, new RawTransponderDataEventArgs(flightList)), Throws.TypeOf<InvalidInputException>());
+        }
         #endregion
 
         #region Log
@@ -250,22 +322,66 @@ namespace Test.ATM
         }
         #endregion
 
-        #region FlightFilter
-        /*
-        [Test]
-        public void transponderFilterChanged_raiseEvent_FilterFlightCalled()
+        #region flightFilter
+
+        //--Lower and higher valid boundaries
+        [TestCase(10000,10000,500,1)]
+        [TestCase(10000, 10000, 20000,1)]
+
+        [TestCase(90000, 10000, 500,1)]
+        [TestCase(90000, 10000, 20000,1)]
+
+        [TestCase(10000, 90000, 500,1)]
+        [TestCase(10000, 90000, 20000,1)]
+
+        [TestCase(90000, 90000, 500,1)]
+        [TestCase(90000, 90000, 20000,1)]
+
+        //----lower invalid boundary
+        [TestCase(10000, 10000, 499, 0)]
+        [TestCase(10000, 10000, 500, 1)]
+
+        [TestCase(9999, 10000, 499, 0)]
+        [TestCase(9999, 10000, 500, 0)]
+
+        [TestCase(10000, 9999, 499, 0)]
+        [TestCase(10000, 9999, 500, 0)]
+
+        [TestCase(9999, 9999, 499, 0)]
+        [TestCase(9999, 9999, 500, 0)]
+        
+        //------ higher invalid boundary
+        [TestCase(90000, 90000, 20001, 0)]
+        [TestCase(90000, 90000, 20000, 1)]
+
+        [TestCase(90001, 90000, 20001, 0)]
+        [TestCase(90001, 90000, 20000, 0)]
+
+        [TestCase(90000, 90001, 20001, 0)]
+        [TestCase(90000, 90001, 20000, 0)]
+
+        [TestCase(90001, 90001, 20001, 0)]
+        [TestCase(90001, 90001, 20000, 0)]
+
+        public void transponderFilterChanged_raiseEvent_FilterFlightCalled(int x, int y, int altitude,int number)
         {
-            var stubCalculator = Substitute.For<IFlightCalculator>();
-            var mockFlightFilter = Substitute.For<FlightFilter>();
-            var stubDataFormatter = Substitute.For<IDataFormatter>();
+            var mockDataFormatter = Substitute.For<IDataFormatter>();
+            var stubFlightCollection = Substitute.For<IFlightCollection>();
+            IFlightFilter uutFlightFilter = new FlightFilter(mockDataFormatter,stubFlightCollection);
 
-            IFlightCollection uutFlightCollection = new FlightCollection(stubCalculator,mockFlightFilter);
+            List<TransponderData> Tliste = new List<TransponderData>();
+            TransponderData td = new TransponderData("TTT",x,y,altitude,new DateTime(2017,10,14,15,20,45,333));
+            Tliste.Add(td);
 
-            mockFlightFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs());
+            List<TransponderData> resultListe = null;
+            uutFlightFilter.transponderFilterChanged += (o, e) => { resultListe = e.transponderData; };
+            mockDataFormatter.transponderChanged += Raise.EventWith(this, new TransponderArgs(){transponderData = Tliste});
+            
 
+            Assert.That(resultListe.Count,Is.EqualTo(number));
             //stubDataFormatter.transponderChanged += Raise.EventWith(this, new TransponderArgs());
         }
-        */
+        
         public class FlightFilterUnitTest
         {
             [SetUp]
