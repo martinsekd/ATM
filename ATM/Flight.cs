@@ -35,11 +35,6 @@ namespace ATM.System
             return false;
         }
 
-        public override int GetHashCode()
-        {
-            return this.TData.Tag.GetHashCode();
-        }
-
         public override bool Equals(object obj)
         {
             return this.Equals(obj as Flight);

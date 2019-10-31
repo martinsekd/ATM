@@ -19,6 +19,31 @@ namespace Test.ATM
     [TestFixture]
     public class TestATM
     {
+        #region Flight
+
+        [TestFixture]
+        public class FlightUnitTest
+        {
+            [Test]
+            public void Flight_CompareTwoFlights_ExpectTrue()
+            {
+                Flight flightA = new Flight(new TransponderData("TEST", 0, 0, 0, DateTime.Now));
+                Flight flightB = new Flight(new TransponderData("TEST", 0, 0, 0, DateTime.Now));
+
+                Assert.That(flightA.Equals(flightB), Is.True);
+            }
+
+            [Test]
+            public void Flight_CompareTwoFlights_ExpectFalse()
+            {
+                Flight flightA = new Flight(new TransponderData("TEST", 0, 0, 0, DateTime.Now));
+                Flight flightB = new Flight(new TransponderData("BEST", 100, 110, 110, DateTime.Now));
+
+                Assert.That(flightA.Equals(flightB), Is.False);
+            }
+        }
+
+        #endregion
         #region FlightCalculator
 
         public class FlightCalculatorUnitTest

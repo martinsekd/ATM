@@ -9,12 +9,8 @@ namespace ATM.System
 {
     public class DataFormatter: IDataFormatter
     {
-        public List<TransponderData> transponderList_{ get; private set; }
-
         public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver)
         {
-            transponderList_ = null;
-            //IFlightFilter flightFilter = new FlightFilter(this);
             transponderReceiver.TransponderDataReady += StringToTransponderData;
             
         }
@@ -47,7 +43,6 @@ namespace ATM.System
                 transponderList.Add(new TransponderData(tag, X, Y, altitude, timeStamp));
             }
 
-            transponderList_ = transponderList;
             OnTransponderChanged(new TransponderArgs { transponderData = transponderList });
         }
 
