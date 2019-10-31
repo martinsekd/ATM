@@ -194,7 +194,7 @@ namespace Test.ATM
             mockDataFormatter.Received(1).StringToTransponderData(Arg.Any<object>(),Arg.Is<RawTransponderDataEventArgs>(arg => arg.TransponderData.Contains("TTT10;20000;30000;14000;20101006213456789")));
         }*/
 
-        /*[Test]
+        [Test]
         public void test5()
         {
             //arrange
@@ -215,15 +215,12 @@ namespace Test.ATM
 
             //act
             uutDataFormatter.transponderChanged += (o, e) => { resultList = e.transponderData; };
+            stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs());
 
-            // stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs());
-
-            //stubReceiver.
             //assert
             Assert.That(resultList[0].X,Is.EqualTo(20000));
-            
-            //mockFlightFilter.Received(1).FilterFlight(Arg.Any<object>(), Arg.Is<TransponderArgs>(arg => arg.transponderData.Contains(td)));
-        }*/
+
+        }
 
         [TestCase("TTT10;10000;30000;14000;20101006213456789",10000)]
         [TestCase("TTT10;10001;30000;14000;20101006213456789", 10001)]
@@ -388,8 +385,8 @@ namespace Test.ATM
             List<TransponderData> Tliste = new List<TransponderData>();
             TransponderData td = new TransponderData("TTT",x,y,altitude,new DateTime(2017,10,14,15,20,45,333));
             Tliste.Add(td);
-
             List<TransponderData> resultListe = null;
+
             uutFlightFilter.transponderFilterChanged += (o, e) => { resultListe = e.transponderData; };
             mockDataFormatter.transponderChanged += Raise.EventWith(this, new TransponderArgs(){transponderData = Tliste});
             
