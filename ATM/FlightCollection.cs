@@ -12,21 +12,16 @@ namespace ATM.System
         private List<Flight> FlightList;
 
         private IFlightCalculator flightCalculator;
-        //private IDataFormatter dataFormatter;
-
-        private IRender render;
 
         public FlightCollection(IFlightCalculator flightCalculator, IFlightFilter flightFilter)
         {
-            flightFilter.transponderFilterChanged += getTransponderData;
+            flightFilter.transponderFilterChanged += GetTransponderData;
             this.FlightList = new List<Flight>();
             this.flightCalculator = flightCalculator;
 
-            ICollisionDetector collisionDetector = new CollisionDetector(this, new CollisionCollection());
-            render = new Render(this,new Console());
         }
 
-        public void getTransponderData(object sender,TransponderArgs e)
+        public void GetTransponderData(object sender,TransponderArgs e)
         {
             var transponderList = e.transponderData;
 
@@ -34,7 +29,8 @@ namespace ATM.System
             {
                 HandleNewData(transponderData);
             }
-            notify();
+
+            Notify();
         }
 
         public event EventHandler<FlightArgs> flightsChanged;
@@ -64,7 +60,7 @@ namespace ATM.System
             }
         }
 
-        public void notify()
+        public void Notify()
         {
             OnFlightsChanged(new FlightArgs() { flights = FlightList });
         }

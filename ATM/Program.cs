@@ -27,15 +27,7 @@ namespace ATM.System
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
             
-            
-            var rec = TransponderReceiver.TransponderReceiverFactory.CreateTransponderDataReceiver();
-
-            
-            IDataFormatter dataFormatter = new DataFormatter(rec);
-            IFlightFilter flightFilter = new FlightFilter(dataFormatter);
-            IFlightCollection flightCollection = new FlightCollection(new FlightCalculator(), flightFilter);
-            ICollisionDetector collisionDetector = new CollisionDetector(flightCollection, new CollisionCollection());
-            ILog logger = new Log(collisionDetector);
+            ATM atm = new ATM();
 
             t.Join();
 

@@ -298,7 +298,7 @@ namespace Test.ATM
         }
         #endregion
 
-        #region flightFilter
+        #region FlightFilter
 
         
         public class FlightFilterUnitTest
