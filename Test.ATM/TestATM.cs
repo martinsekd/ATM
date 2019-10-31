@@ -44,6 +44,7 @@ namespace Test.ATM
         }
 
         #endregion
+
         #region FlightCalculator
 
         public class FlightCalculatorUnitTest
@@ -190,6 +191,34 @@ namespace Test.ATM
                 };
 
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+
+                Assert.That(receivedArgs.flights.Count, Is.EqualTo(2));
+            }
+
+            [Test]
+            public void FlightCollection_ReceiveSameTwoFlightsTwiceButWithDifferentCoordinates_RaisedEventContainsTwoFlights()
+            {
+                List<TransponderData> testList1 = new List<TransponderData>()
+                {
+                    new TransponderData("TEST", 0, 0, 0, DateTime.Now),
+                    new TransponderData("OTHERTEST", 0, 0, 0, DateTime.Now)
+                };
+
+                List<TransponderData> testList2 = new List<TransponderData>()
+                {
+                    new TransponderData("TEST", 500, 500, 500, DateTime.Now),
+                    new TransponderData("OTHERTEST", 500, 500, 500, DateTime.Now.AddSeconds(10))
+                };
+
+                List<TransponderData> testList3 = new List<TransponderData>()
+                {
+                    new TransponderData("OTHERTEST", 500, 500, 500, DateTime.Now),
+                    new TransponderData("TEST", 1000, 1000, 1000, DateTime.Now.AddSeconds(20))
+                };
+
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList1 });
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList2 });
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList3 });
 
                 Assert.That(receivedArgs.flights.Count, Is.EqualTo(2));
             }
