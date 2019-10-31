@@ -33,8 +33,8 @@ namespace ATM.System
 
             IDataFormatter dataFormatter = new DataFormatter(receiver);
             IFlightFilter flightFilter = new FlightFilter(dataFormatter);
-            IFlightCollection flightCollection = new FlightCollection(new FlightCalculator(), flightFilter);
-            ICollisionDetector collisionDetector = new CollisionDetector(flightCollection, new CollisionCollection());
+            ICollisionDetector collisionDetector = new CollisionDetector(new CollisionCollection());
+            IFlightCollection flightCollection = new FlightCollection(new FlightCalculator(),flightFilter,collisionDetector);
             ILog logger = new Log(collisionDetector);
             IConsole console = new Console();
             IRender render = new Render(flightCollection, console, true);
@@ -63,8 +63,8 @@ namespace ATM.System
             Canvas.SetLeft(field, 0);
             window.Content = can;
 
-            shapes = new Ellipse[30];
-            for(int i=0;i<30;i++) {
+            shapes = new Ellipse[50];
+            for(int i=0;i<50;i++) {
                 shapes[i] = new Ellipse();
             shapes[i].Height = 10;
             shapes[i].Width = 10;
@@ -81,10 +81,14 @@ namespace ATM.System
         }
         public delegate void koorDelegate();
 
-        public static void setflight(double x, double y,int index)
+        public static void setflight(double x, double y,int index,bool collision)
         {
             koorDelegate metode = delegate
             {
+                if (collision)
+                    shapes[index].Fill = Brushes.Red;
+                else
+                    shapes[index].Fill = Brushes.Green;
                 Canvas.SetTop(shapes[index], y);
                 Canvas.SetLeft(shapes[index], x);
             };

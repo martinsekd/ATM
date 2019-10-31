@@ -18,5 +18,6 @@ namespace ATM.System
         void DetectCollisions(List<Flight> flightList);
 
         event EventHandler<CollisionArgs> NewCollision;
+        List<Flight> OnFlightsChanged(FlightArgs e);
     }
 }

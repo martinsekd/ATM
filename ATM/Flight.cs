@@ -11,12 +11,14 @@ namespace ATM.System
         public TransponderData TData { get; set; }
         public double Speed { get; set; }
         public double Direction { get; set; }
+        public bool collision { get; set; }
 
         public Flight(TransponderData data)
         {
             TData = data;
             Speed = 0;
             Direction = 0;
+            collision = false;
         }
 
         private bool Equals(Flight compare)

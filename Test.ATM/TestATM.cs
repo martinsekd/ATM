@@ -112,7 +112,8 @@ namespace Test.ATM
         {
             private IFlightCollection uut;
             private IFlightCalculator stubCalculator;
-            private IFlightFilter fakeFilter;
+            private IFlightFilter stubFilter;
+            private ICollisionDetector stubCollisionDetector;
             private FlightArgs receivedArgs;
             private int numberOfFlightsChangedEvents;
 
@@ -138,9 +139,9 @@ namespace Test.ATM
             {
                 //arrange
                 stubCalculator = new StubCalculator();
-                fakeFilter = Substitute.For<IFlightFilter>();
-
-                uut = new FlightCollection(stubCalculator, fakeFilter);
+                stubFilter = Substitute.For<IFlightFilter>();
+                stubCollisionDetector = Substitute.For<ICollisionDetector>();
+                uut = new FlightCollection(stubCalculator, stubFilter,stubCollisionDetector);
 
                 receivedArgs = null;
                 numberOfFlightsChangedEvents = 0;
@@ -161,7 +162,7 @@ namespace Test.ATM
                 testList.Add(testData);
 
                 //act
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+                stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
                 //assert
                 Assert.That(numberOfFlightsChangedEvents, Is.EqualTo(1));
@@ -177,7 +178,7 @@ namespace Test.ATM
                 Flight expectedFlight = new Flight(testData);
 
                 //act
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+                stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
                 //assert
                 Assert.That(receivedArgs.flights[0].Equals(expectedFlight),Is.True);
@@ -193,8 +194,8 @@ namespace Test.ATM
                 };
 
                 //act
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+                stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+                stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
                 //assert
                 Assert.That(receivedArgs.flights[0].Speed, Is.EqualTo(5));
@@ -213,7 +214,7 @@ namespace Test.ATM
                 };
 
                 //act
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+                stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
                 //assert
                 Assert.That(receivedArgs.flights.Count, Is.EqualTo(2));
@@ -240,9 +241,9 @@ namespace Test.ATM
                     new TransponderData("TEST", 1000, 1000, 1000, DateTime.Now.AddSeconds(20))
                 };
 
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList1 });
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList2 });
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList3 });
+                stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList1 });
+                stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList2 });
+                stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList3 });
 
                 Assert.That(receivedArgs.flights.Count, Is.EqualTo(2));
             }
@@ -265,7 +266,8 @@ namespace Test.ATM
                 //arrange
                 var stubFlightFilter = Substitute.For<IFlightFilter>();
                 var stubFlightCalculator = Substitute.For<IFlightCalculator>();
-                var stubFlightCollection = Substitute.For<FlightCollection>(stubFlightCalculator,stubFlightFilter);
+                var stubFlightCollision = Substitute.For<ICollisionDetector>();
+                var stubFlightCollection = Substitute.For<IFlightCollection>();
                 var stubConsole = Substitute.For<IConsole>();
 
                 var uutRender = new Render(stubFlightCollection,stubConsole, false);
@@ -609,8 +611,8 @@ namespace Test.ATM
             public void SetUp()
             {
                 //arrange
-                _fakeFlightCollection = Substitute.For<IFlightCollection>();
-                uut = new CollisionDetector(_fakeFlightCollection, new CollisionCollection());
+                //_fakeFlightCollection = Substitute.For<IFlightCollection>();
+                uut = new CollisionDetector(new CollisionCollection());
 
                 receivedArgs = null;
                 numberOfCollisionEvents = 0;

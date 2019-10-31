@@ -16,7 +16,6 @@ namespace ATM.System
             Environment.GetFolderPath(
                 Environment.SpecialFolder.Desktop) + "\\Log.txt";
 
-
         // tid + txt
 
         public Log(ICollisionDetector collisionDetector)

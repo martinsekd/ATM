@@ -15,17 +15,29 @@ namespace ATM.System
         public event EventHandler<CollisionArgs> NewCollision;
 
 
-        public CollisionDetector(IFlightCollection flightCollection, ICollisionCollection collisionCollection)
+        public CollisionDetector( ICollisionCollection collisionCollection)
         {
-            flightCollection.flightsChanged += OnFlightsChanged;
+            //flightCollection.flightsChanged += OnFlightsChanged;
             CollisionCollection = collisionCollection;
         }
 
-        public void OnFlightsChanged(object sender, FlightArgs e)
+        public List<Flight> OnFlightsChanged(FlightArgs e)
         {
             DetectCollisions(e.flights);
+            return raiseCollisionFlags(e.flights);
         }
 
+        public List<Flight> raiseCollisionFlags(List<Flight> flights)
+        {
+            foreach (Collision col in Collisions)
+            {
+                string tagA = col.FlightA.TData.Tag;
+                string tagB = col.FlightB.TData.Tag;
+                flights.Find(f => f.TData.Tag.Equals(tagA)).collision = true;
+                flights.Find(f => f.TData.Tag.Equals(tagB)).collision = true;
+            }
+            return flights;
+        }
         public void DetectCollisions(List<Flight> flights)
         {
             var sortedFlights = flights.OrderBy(f => f.TData.X).ToList();
@@ -47,6 +59,7 @@ namespace ATM.System
                     if (IsCollision(currentFlight, sortedFlights[j]))
                     {
                         collisions.Add(new Collision(currentFlight, sortedFlights[j]));
+
                     }
 
                     j++;

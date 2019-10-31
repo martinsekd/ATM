@@ -10,14 +10,15 @@ namespace ATM.System
     public class FlightCollection : IFlightCollection
     {
         private List<Flight> FlightList;
-
         private IFlightCalculator flightCalculator;
+        private ICollisionDetector collisionDetector_;
 
-        public FlightCollection(IFlightCalculator flightCalculator, IFlightFilter flightFilter)
+        public FlightCollection(IFlightCalculator flightCalculator, IFlightFilter flightFilter,ICollisionDetector collisionDetector)
         {
             flightFilter.transponderFilterChanged += GetTransponderData;
             this.FlightList = new List<Flight>();
             this.flightCalculator = flightCalculator;
+            this.collisionDetector_ = collisionDetector;
 
         }
 
@@ -29,7 +30,7 @@ namespace ATM.System
             {
                 HandleNewData(transponderData);
             }
-
+            FlightList = collisionDetector_.OnFlightsChanged(new FlightArgs() { flights = FlightList });
             Notify();
         }
 
