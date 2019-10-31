@@ -321,55 +321,7 @@ namespace Test.ATM
             }
         }
 
-        /*[Test]
-        public void test3()
-        {
-            //arrange
-            var stubReceiver = Substitute.For<ITransponderReceiver>();
-            var mockDataFormatter = Substitute.For<IDataFormatter>();
-            var uutDataFormatter = new DataFormatter(stubReceiver);
-            
-            
-
-            List<string> flightList = new List<string>();
-            flightList.Add("TTT10;20000;30000;14000;20101006213456789");
-
-            //act
-            
-            //stubReceiver.TransponderDataReady += mockDataFormatter.StringToTransponderData;
-            stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs(flightList));
-
-            //assert
-            mockDataFormatter.Received(1).StringToTransponderData(Arg.Any<object>(),Arg.Is<RawTransponderDataEventArgs>(arg => arg.TransponderData.Contains("TTT10;20000;30000;14000;20101006213456789")));
-        }*/
-
-        /*[Test]
-        public void test5()
-        {
-            //arrange
-            var stubReceiver = Substitute.For<ITransponderReceiver>();
-            var stubFlightFilter = Substitute.For<IFlightFilter>();
-            var uutDataFormatter = new DataFormatter(stubReceiver,stubFlightFilter);
-            var mockFlightFilter = Substitute.For<FlightFilter>(uutDataFormatter);
-
-            List<TransponderData> resultList = null;
-
-            //var fakeDataFormatter = new DataFormatter(stubReceiver, MockFlightFilter);
-
-            //List<string> flightList = new List<string>();
-            //flightList.Add(a);
-            //List<TransponderData> transponderList = new List<TransponderData>();
-            //TransponderData td = new TransponderData("TTT10",20000,30000,14000,new DateTime(2010,10,6,21,34,56,789));
-            //transponderList.Add(td);
-
-            //act
-            uutDataFormatter.transponderChanged += (o, e) => { resultList = e.transponderData; };
-            //stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs());
-
-            //assert
-            Assert.That(resultList[0].X,Is.EqualTo(20000));
-
-        }*/
+        
 
 
         #endregion
@@ -384,6 +336,7 @@ namespace Test.ATM
             [SetUp]
             public void SetUp()
             {
+                //arrange
                 _fakeCollisionDetector = Substitute.For<ICollisionDetector>();
                 uut = new Log(_fakeCollisionDetector);
             }
@@ -400,29 +353,35 @@ namespace Test.ATM
             [Test]
             public void LoggerPrintsToLastLineOfLogFile()
             {
+                //arrange
                 Flight flightA = new Flight(new TransponderData("ABC123", 0, 0, 0, DateTime.Now));
                 Flight flightB = new Flight(new TransponderData("CAT234", 0, 0, 0, DateTime.Now));
                 Collision newCollision = new Collision(flightA,flightB);
 
+                //act
                 _fakeCollisionDetector.NewCollision += Raise.EventWith(this,
                     new CollisionArgs(new Collision(flightA, flightB)));
 
                 string lastLineInLog = File.ReadLines(Log.LogFile).Last();
                 string expectedText = uut.CollisionToLogString(newCollision);
 
+                //assert
                 Assert.That(lastLineInLog.Equals(expectedText));
             }
 
             [Test]
             public void LoggerCreatesLogFile()
             {
+                //arrange
                 Flight flightA = new Flight(new TransponderData("ABC123", 0, 0, 0, DateTime.Now));
                 Flight flightB = new Flight(new TransponderData("CAT234", 0, 0, 0, DateTime.Now));
                 Collision newCollision = new Collision(flightA, flightB);
 
+                //act
                 _fakeCollisionDetector.NewCollision += Raise.EventWith(this,
                     new CollisionArgs(new Collision(flightA, flightB)));
 
+                //assert
                 Assert.That(File.Exists(Log.LogFile));
             }
 
@@ -441,14 +400,12 @@ namespace Test.ATM
             [SetUp]
             public void SetUp()
             {
+                //arrange
                 fakeDataFormatter = Substitute.For<IDataFormatter>();
                 fakeFlightCollection = Substitute.For<IFlightCollection>();
 
                 uut = new FlightFilter(fakeDataFormatter);
 
-                var mockDataFormatter = Substitute.For<IDataFormatter>();
-                var stubFlightCollection = Substitute.For<IFlightCollection>();
-                IFlightFilter uutFlightFilter = new FlightFilter(mockDataFormatter);
             }
 
 
@@ -493,16 +450,18 @@ namespace Test.ATM
 
             public void transponderFilterChanged_raiseEvent_FilterFlightCalled(int x, int y, int altitude, int numberOfValidFlights)
             {
-
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>();
                 TransponderData testData = new TransponderData("TTT", x, y, altitude, new DateTime(2017, 10, 14, 15, 20, 45, 333));
                 testList.Add(testData);
 
                 List<TransponderData> resultList = null;
+                
+                //act
                 uut.transponderFilterChanged += (o, e) => { resultList = e.transponderData; };
                 fakeDataFormatter.transponderChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
-
+                //assert
                 Assert.That(resultList.Count, Is.EqualTo(numberOfValidFlights));
             }
         }
@@ -528,16 +487,18 @@ namespace Test.ATM
             [TestCase("123", "DEF", "ABC", "DEF", false)]
             public void Collision_CompareCollisionWithTagsAandBToCollisionWithTagCandD_expected(string tagA, string tagB, string tagC, string tagD, bool expected)
             {
+                //arrange
                 TransponderData dataA = new TransponderData(tagA, 0, 0, 0, DateTime.Now);
                 TransponderData dataB = new TransponderData(tagB, 0, 0, 0, DateTime.Now);
                 TransponderData dataC = new TransponderData(tagC, 0, 0, 0, DateTime.Now);
                 TransponderData dataD = new TransponderData(tagD, 0, 0, 0, DateTime.Now);
                 
+                //act
                 Collision collisionA = new Collision(new Flight(dataA),new Flight(dataB));
                 Collision collisionB = new Collision(new Flight(dataC),new Flight(dataD));
 
+                //assert
                 bool compare = collisionA.Equals(collisionB);
-
                 Assert.That(compare, Is.EqualTo(expected));
             }
         }
@@ -555,24 +516,31 @@ namespace Test.ATM
             [Test]
             public void DefaultConstructorListIsEmpty()
             {
+                //arrange and act
                 CollisionCollection uut = new CollisionCollection();
-
+                
+                //assert
                 Assert.That(uut.Collisions.Count,Is.Zero);
             }
 
             [Test]
             public void ListConstructorListNotEmpty()
             {
+                //arrange
                 TransponderData dummyData = new TransponderData("ABC123", 5000, 5000, 5000, DateTime.Now);
                 Flight flightA = new Flight(dummyData);
                 Flight flightB = new Flight(dummyData);
                 Collision testCollision = new Collision(flightA,flightB);
+
                 List<Collision> testList = new List<Collision>();
                 testList.Add(testCollision);
                 testList.Add(testCollision);
                 testList.Add(testCollision);
+                
+                //act
                 CollisionCollection uut = new CollisionCollection(testList);
 
+                //assert
                 Assert.That(uut.Collisions.Count,Is.GreaterThan(0));
             }
         }
@@ -590,7 +558,7 @@ namespace Test.ATM
             [SetUp]
             public void SetUp()
             {
-
+                //arrange
                 _fakeFlightCollection = Substitute.For<IFlightCollection>();
                 uut = new CollisionDetector(_fakeFlightCollection, new CollisionCollection());
 
@@ -607,29 +575,35 @@ namespace Test.ATM
             [Test]
             public void CollisionEmits()
             {
+                //arrange
                 List<Flight> testFlights = new List<Flight>
                 {
                     new Flight(new TransponderData("ABC123", 4900, 5000, 2000, DateTime.Now)),
                     new Flight(new TransponderData("BOB123", 5100, 5000, 2100, DateTime.Now))
                 };
 
+                //act
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
+                //assert
                 Assert.That(numberOfCollisionEvents, Is.EqualTo(1));
             }
 
             [Test]
             public void CollisionEmitsOnlyOnce()
             {
+                //arrange
                 List<Flight> testFlights = new List<Flight>
                 {
                     new Flight(new TransponderData("ABC123", 4900, 5000, 2000, DateTime.Now)),
                     new Flight(new TransponderData("BOB123", 5100, 5000, 2100, DateTime.Now))
                 };
 
+                //act
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
+                //assert
                 Assert.That(numberOfCollisionEvents, Is.EqualTo(1));
 
             }
@@ -637,13 +611,14 @@ namespace Test.ATM
             [Test]
             public void PassingFlightsEmitOnlyOnce()
             {
-
+                //arrange
                 List<Flight> testFlights = new List<Flight>
                 {
                     new Flight(new TransponderData("ABC123", 4900, 5000, 2000, DateTime.Now)),
                     new Flight(new TransponderData("BOB123", 5100, 5000, 2100, DateTime.Now))
                 };
 
+                //act
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
                 testFlights.Clear();
@@ -652,12 +627,14 @@ namespace Test.ATM
 
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
+                //assert
                 Assert.That(numberOfCollisionEvents, Is.EqualTo(1));
             }
 
             [Test]
             public void ThreeFlightsInCollisionEmitsThrice()
             {
+                //arrange
                 List<Flight> testFlights = new List<Flight>
                 {
                     new Flight(new TransponderData("ABC123", 4900, 5000, 2000, DateTime.Now)),
@@ -665,21 +642,24 @@ namespace Test.ATM
                     new Flight(new TransponderData("KAT666", 5000, 5000, 2050, DateTime.Now))
                 };
 
+                //act
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
+                //assert
                 Assert.That(numberOfCollisionEvents, Is.EqualTo(3));
             }
 
             [Test]
             public void PreviouslyInCollisionNoLongerInCollision()
             {
+                //arrange
                 List<Flight> testFlights = new List<Flight>
                 {
                     new Flight(new TransponderData("ABC123", 4900, 5000, 2000, DateTime.Now)),
                     new Flight(new TransponderData("BOB123", 5100, 5000, 2100, DateTime.Now))
                 };
 
-
+                //act
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
                 Collision oldCollision = receivedArgs.Collision;
@@ -690,6 +670,7 @@ namespace Test.ATM
 
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
+                //assert
                 Assert.That(uut.Collisions, Does.Not.Contain(oldCollision));
 
             }
