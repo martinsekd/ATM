@@ -14,16 +14,11 @@ namespace ATM.System
         public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver)
         {
             transponderList_ = null;
-            IFlightFilter flightFilter = new FlightFilter(this);
+            //IFlightFilter flightFilter = new FlightFilter(this);
             transponderReceiver.TransponderDataReady += StringToTransponderData;
             
         }
 
-        public DataFormatter(TransponderReceiver.ITransponderReceiver transponderReceiver, IFlightFilter flightFilter)
-        {
-            transponderReceiver.TransponderDataReady += StringToTransponderData;
-            
-        }
 
         public event EventHandler<TransponderArgs> transponderChanged;
 

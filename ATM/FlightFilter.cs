@@ -9,13 +9,9 @@ namespace ATM.System
     public class FlightFilter : IFlightFilter
     {
         public List<TransponderData> transponderListe {get; private set; }
-        public FlightFilter(IDataFormatter dataFormatter)
-        {
-            FlightCollection flightCollection = new FlightCollection(new FlightCalculator(), this);
-            dataFormatter.transponderChanged += FilterFlight;
-        }
+        
 
-        public FlightFilter(IDataFormatter dataFormatter, IFlightCollection flightCollection)
+        public FlightFilter(IDataFormatter dataFormatter)
         {
             dataFormatter.transponderChanged += FilterFlight;
         }
