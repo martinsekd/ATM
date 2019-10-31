@@ -9,7 +9,7 @@ using ATM.System;
 namespace ATM.System
 {
     //Excluded from code coverage since stdout prints cannot be tested.
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverageAttribute]
     class Console : IConsole
     {
         public void WriteLine(string lineToWrite)
