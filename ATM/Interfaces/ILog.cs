@@ -10,5 +10,6 @@ namespace ATM.System
     public interface ILog
     {
         void Logwriter(object sender, CollisionArgs e);
+        string CollisionToLogString(Collision collision);
     }
 }

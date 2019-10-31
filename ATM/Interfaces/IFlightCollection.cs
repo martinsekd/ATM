@@ -14,5 +14,11 @@ namespace ATM.System
     public interface IFlightCollection
     {
         event EventHandler<FlightArgs> flightsChanged;
+
+        void GetTransponderData(object sender, TransponderArgs e);
+        void HandleNewData(TransponderData newData);
+        void Notify();
+
+
     }
 }
