@@ -9,14 +9,13 @@ namespace ATM.System
 {
     public class Render : IRender
     {
-        public bool renderInGui = true;
+        private bool renderInGui_ = true;
         private IConsole console_;
 
-        public Render(IFlightCollection col,IConsole console,bool renderInGui)
+        public Render(IFlightCollection col,IConsole console,bool renderInGui=true)
         {
-            this.console_ = console;
-            this.renderInGui = renderInGui;
-
+            renderInGui_ = renderInGui;
+            console_ = console;
             col.flightsChanged += RenderFlights;
         }
 
@@ -31,11 +30,9 @@ namespace ATM.System
             for (int i = 0; i < flights.Count; i++)
             {
                 Flight f = flights[i];
-                if (renderInGui && Program.shapes[i] != null)
-                {
+                if (renderInGui_ && Program.shapes[i] != null)
                     //This is not covered by tests, since we do not test the GUI implementation and this affects the GUI
                     Program.setflight(f.TData.X / 200, f.TData.Y / 200, i);
-                }
 
                 console_.WriteLine(string.Format("Flight: {0}\n\tPosition X:{1} Y:{2}\tAltitude: {3}\n\tSpeed: {4}\t\tDirection {5}\n", f.TData.Tag, f.TData.X, f.TData.Y, f.TData.Altitude, f.Speed, f.Direction));
                 
