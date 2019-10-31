@@ -135,6 +135,7 @@ namespace Test.ATM
             [SetUp]
             public void SetUp()
             {
+                //arrange
                 stubCalculator = new StubCalculator();
                 fakeFilter = Substitute.For<IFlightFilter>();
 
@@ -153,39 +154,48 @@ namespace Test.ATM
             [Test]
             public void FlightCollection_ReceiveData_RaisesEvent()
             {
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>();
                 TransponderData testData = new TransponderData("TEST", 0, 0, 0, DateTime.Now);
                 testList.Add(testData);
 
+                //act
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
+                //assert
                 Assert.That(numberOfFlightsChangedEvents, Is.EqualTo(1));
             }
 
             [Test]
             public void FlightCollection_ReceiveData_RaiseEventWithExpectedContent()
             {
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>();
                 TransponderData testData = new TransponderData("TEST", 0, 0, 0, DateTime.Now);
                 testList.Add(testData);
                 Flight expectedFlight = new Flight(testData);
 
+                //act
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
+                //assert
                 Assert.That(receivedArgs.flights[0].Equals(expectedFlight),Is.True);
             }
 
             [Test]
             public void FlightCollection_ReceiveSameDataTwice_SpeedAndDirectionSet()
             {
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>()
                 {
                     new TransponderData("TEST", 0, 0, 0, DateTime.Now)
                 };
 
+                //act
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
+                //assert
                 Assert.That(receivedArgs.flights[0].Speed, Is.EqualTo(5));
                 Assert.That(receivedArgs.flights[0].Direction, Is.EqualTo(5));
             }
@@ -193,6 +203,7 @@ namespace Test.ATM
             [Test]
             public void FlightCollection_ReceiveMultipleFlights_RaisedEventContainsNoDuplicates()
             {
+                //arrange
                 List<TransponderData> testList = new List<TransponderData>()
                 {
                     new TransponderData("TEST", 0, 0, 0, DateTime.Now),
@@ -200,8 +211,10 @@ namespace Test.ATM
                     new TransponderData("OTHERTEST", 0, 0, 0, DateTime.Now)
                 };
 
+                //act
                 fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
+                //assert
                 Assert.That(receivedArgs.flights.Count, Is.EqualTo(2));
             }
         }
