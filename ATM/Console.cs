@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ATM.Interfaces;
+using ATM.System;
 
-namespace ATM
+namespace ATM.System
 {
     class Console : IConsole
     {

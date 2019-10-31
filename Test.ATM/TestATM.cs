@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ATM;
-using ATM.Interfaces;
 using ATM.System;
 using Castle.Core.Smtp;
 using NSubstitute;
@@ -225,7 +224,7 @@ namespace Test.ATM
 
             //act
             uutDataFormatter.transponderChanged += (o, e) => { resultList = e.transponderData; };
-            stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs());
+            //stubReceiver.TransponderDataReady += Raise.EventWith(this,new RawTransponderDataEventArgs());
 
             //assert
             Assert.That(resultList[0].X,Is.EqualTo(20000));
