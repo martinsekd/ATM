@@ -243,8 +243,7 @@ namespace Test.ATM
             {
                 var stubFlightCollection = Substitute.For<IFlightCollection>();
                 var stubConsole = Substitute.For<IConsole>();
-                var uutRender = new Render(stubFlightCollection, stubConsole);
-                uutRender.underTest = true;
+                var uutRender = new Render(stubFlightCollection, stubConsole, false);
 
                 List<Flight> resultListe = null;
 
