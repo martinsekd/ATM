@@ -153,6 +153,28 @@ namespace Test.ATM
                 Assert.That(resultListe[0],Is.EqualTo(flightliste[0]));
             }
 
+            [Test]
+            public void event_raisedevent_rasied()
+            {
+                var stubFlightCollection = Substitute.For<IFlightCollection>();
+                var stubConsole = Substitute.For<IConsole>();
+                var uutRender = new Render(stubFlightCollection, stubConsole);
+
+                List<Flight> resultListe = null;
+
+                List<Flight> flightliste = new List<Flight>();
+                var flight = new Flight(new TransponderData("TTT", 1, 1, 1, new DateTime(2017, 10, 5, 23, 10, 45, 666)));
+                flight.Direction = 100;
+                flight.Speed = 50;
+
+                flightliste.Add(flight);
+
+                uutRender.flightsChanged += (o, e) => { resultListe = e.flights; };
+                stubFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() {flights = flightliste});
+
+                Assert.That(resultListe[0],Is.EqualTo(flightliste[0]));
+            }
+
             
 
         }
