@@ -203,7 +203,7 @@ namespace Test.ATM
             mockDataFormatter.Received(1).StringToTransponderData(Arg.Any<object>(),Arg.Is<RawTransponderDataEventArgs>(arg => arg.TransponderData.Contains("TTT10;20000;30000;14000;20101006213456789")));
         }*/
 
-        [Test]
+        /*[Test]
         public void test5()
         {
             //arrange
@@ -229,7 +229,7 @@ namespace Test.ATM
             //assert
             Assert.That(resultList[0].X,Is.EqualTo(20000));
 
-        }
+        }*/
 
 
         #endregion
