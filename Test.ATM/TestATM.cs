@@ -698,6 +698,7 @@ namespace Test.ATM
             [Test]
             public void NoCollisions()
             {
+                //arrange
                 List<Flight> testFlights = new List<Flight>
                 {
                     new Flight(new TransponderData("ABC123", 10000, 45000, 8000, DateTime.Now)),
@@ -706,8 +707,10 @@ namespace Test.ATM
                     new Flight(new TransponderData("BOB123", 45000, 90000, 2000, DateTime.Now))
                 };
 
+                //act
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
+                //assert
                 Assert.That(numberOfCollisionEvents, Is.EqualTo(0));
                 Assert.That(uut.Collisions, Is.Empty);
             }
@@ -715,6 +718,7 @@ namespace Test.ATM
             [Test]
             public void NoCollisionsEdgeCases()
             {
+                //arrange
                 List<Flight> testFlights = new List<Flight>
                 {
                     new Flight(new TransponderData("ABC123", 5000, 45000, 4000, DateTime.Now)),
@@ -723,8 +727,10 @@ namespace Test.ATM
                     new Flight(new TransponderData("BOB123", 10000, 50000,4300, DateTime.Now))
                 };
 
+                //act
                 _fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
 
+                //assert
                 Assert.That(numberOfCollisionEvents, Is.EqualTo(0));
                 Assert.That(uut.Collisions, Is.Empty);
             }
