@@ -74,18 +74,35 @@ namespace Test.ATM
         public class FlightCollectionUnitTest
         {
             private IFlightCollection uut;
-            private IFlightCalculator fakeCalculator;
+            private IFlightCalculator stubCalculator;
             private IFlightFilter fakeFilter;
             private FlightArgs receivedArgs;
             private int numberOfFlightsChangedEvents;
 
+            internal class StubCalculator: IFlightCalculator
+            {
+                public StubCalculator()
+                {
+
+                }
+
+                public double CalculateSpeed(TransponderData t1, TransponderData t2)
+                {
+                    return 5;
+                }
+
+                public double CalculateDirection(TransponderData t1, TransponderData t2)
+                {
+                    return 5;
+                }
+            }
             [SetUp]
             public void SetUp()
             {
-                fakeCalculator = Substitute.For<IFlightCalculator>();
+                stubCalculator = new StubCalculator();
                 fakeFilter = Substitute.For<IFlightFilter>();
 
-                uut = new FlightCollection(fakeCalculator, fakeFilter);
+                uut = new FlightCollection(stubCalculator, fakeFilter);
 
                 receivedArgs = null;
                 numberOfFlightsChangedEvents = 0;
@@ -98,15 +115,58 @@ namespace Test.ATM
             }
 
             [Test]
-            public void FlightCollection_ReceivedEventRaisesEvent()
+            public void FlightCollection_ReceiveData_RaisesEvent()
             {
                 List<TransponderData> testList = new List<TransponderData>();
                 TransponderData testData = new TransponderData("TEST", 0, 0, 0, DateTime.Now);
                 testList.Add(testData);
 
-                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() {transponderData = testList});
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
 
                 Assert.That(numberOfFlightsChangedEvents, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void FlightCollection_ReceiveData_RaiseEventWithExpectedContent()
+            {
+                List<TransponderData> testList = new List<TransponderData>();
+                TransponderData testData = new TransponderData("TEST", 0, 0, 0, DateTime.Now);
+                testList.Add(testData);
+                Flight expectedFlight = new Flight(testData);
+
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+
+                Assert.That(receivedArgs.flights[0].Equals(expectedFlight),Is.True);
+            }
+
+            [Test]
+            public void FlightCollection_ReceiveSameDataTwice_SpeedAndDirectionSet()
+            {
+                List<TransponderData> testList = new List<TransponderData>()
+                {
+                    new TransponderData("TEST", 0, 0, 0, DateTime.Now)
+                };
+
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+
+                Assert.That(receivedArgs.flights[0].Speed, Is.EqualTo(5));
+                Assert.That(receivedArgs.flights[0].Direction, Is.EqualTo(5));
+            }
+
+            [Test]
+            public void FlightCollection_ReceiveMultipleFlights_RaisedEventContainsNoDuplicates()
+            {
+                List<TransponderData> testList = new List<TransponderData>()
+                {
+                    new TransponderData("TEST", 0, 0, 0, DateTime.Now),
+                    new TransponderData("TEST", 0, 0, 0, DateTime.Now),
+                    new TransponderData("OTHERTEST", 0, 0, 0, DateTime.Now)
+                };
+
+                fakeFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
+
+                Assert.That(receivedArgs.flights.Count, Is.EqualTo(2));
             }
         }
 
