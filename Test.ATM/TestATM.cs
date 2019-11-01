@@ -291,7 +291,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void event_raisedevent_rasied()
+            public void flightsChanged_addArgumentAndRaiseEvent_rasiedEvent()
             {
                 //arrange
                 var stubFlightCollection = Substitute.For<IFlightCollection>();
@@ -404,7 +404,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void LoggerPrintsToLastLineOfLogFile()
+            public void ReadLine_addedCollision_LoggerPrintsToLastLineOfLogFile()
             {
                 //arrange
                 Flight flightA = new Flight(new TransponderData("ABC123", 0, 0, 0, DateTime.Now));
@@ -423,7 +423,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void LoggerCreatesLogFile()
+            public void LogFile_addedCollision_LoggerCreatesLogFile()
             {
                 //arrange
                 Flight flightA = new Flight(new TransponderData("ABC123", 0, 0, 0, DateTime.Now));
@@ -567,7 +567,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void DefaultConstructorListIsEmpty()
+            public void Collisions_callContructor_DefaultConstructorListIsEmpty()
             {
                 //arrange and act
                 CollisionCollection uut = new CollisionCollection();
@@ -577,7 +577,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void ListConstructorListNotEmpty()
+            public void Collisions_addMultipleFlights_ListConstructorListNotEmpty()
             {
                 //arrange
                 TransponderData dummyData = new TransponderData("ABC123", 5000, 5000, 5000, DateTime.Now);
@@ -612,7 +612,6 @@ namespace Test.ATM
             public void SetUp()
             {
                 //arrange
-                //_fakeFlightCollection = Substitute.For<IFlightCollection>();
                 uut = new CollisionDetector(new CollisionCollection());
 
                 receivedArgs = null;
@@ -626,7 +625,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void CollisionEmits()
+            public void OnFlightsChanged_addMultipleFlights_CollisionEmits()
             {
                 //arrange
                 List<Flight> testFlights = new List<Flight>
@@ -636,14 +635,13 @@ namespace Test.ATM
                 };
 
                 //act
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.DetectCollisions(testFlights);
                 //assert
                 Assert.That(numberOfCollisionEvents, Is.EqualTo(1));
             }
 
             [Test]
-            public void CollisionEmitsOnlyOnce()
+            public void OnFlightsChanged_addMultipleFlights_CollisionEmitsOnlyOnce()
             {
                 //arrange
                 List<Flight> testFlights = new List<Flight>
@@ -653,8 +651,6 @@ namespace Test.ATM
                 };
 
                 //act
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.OnFlightsChanged(new FlightArgs() {flights = testFlights});
                 uut.OnFlightsChanged(new FlightArgs() {flights = testFlights});
 
@@ -664,7 +660,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void PassingFlightsEmitOnlyOnce()
+            public void OnFlightsChanged_addMultipleFlights_PassingFlightsEmitOnlyOnce()
             {
                 //arrange
                 List<Flight> testFlights = new List<Flight>
@@ -674,14 +670,12 @@ namespace Test.ATM
                 };
 
                 //act
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.OnFlightsChanged(new FlightArgs() { flights = testFlights });
 
                 testFlights.Clear();
                 testFlights.Add(new Flight(new TransponderData("ABC123", 5100, 5000, 2000, DateTime.Now)));
                 testFlights.Add(new Flight(new TransponderData("BOB123", 4900, 5000, 2100, DateTime.Now)));
 
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.OnFlightsChanged(new FlightArgs() { flights = testFlights });
 
                 //assert
@@ -689,7 +683,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void ThreeFlightsInCollisionEmitsThrice()
+            public void OnFlightsChanged_addMultipleFlights_ThreeFlightsInCollisionEmitsThrice()
             {
                 //arrange
                 List<Flight> testFlights = new List<Flight>
@@ -700,7 +694,6 @@ namespace Test.ATM
                 };
 
                 //act
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.OnFlightsChanged(new FlightArgs() { flights = testFlights });
 
                 //assert
@@ -708,7 +701,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void PreviouslyInCollisionNoLongerInCollision()
+            public void OnFlightsChanged_addMultipleFlights_PreviouslyInCollisionNoLongerInCollision()
             {
                 //arrange
                 List<Flight> testFlights = new List<Flight>
@@ -718,7 +711,6 @@ namespace Test.ATM
                 };
 
                 //act
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.OnFlightsChanged(new FlightArgs() { flights = testFlights });
 
                 Collision oldCollision = receivedArgs.Collision;
@@ -727,7 +719,6 @@ namespace Test.ATM
                 testFlights.Add(new Flight(new TransponderData("ABC123", 2000, 5000, 2000, DateTime.Now)));
                 testFlights.Add(new Flight(new TransponderData("BOB123", 18000, 5000, 2100, DateTime.Now)));
 
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.OnFlightsChanged(new FlightArgs() { flights = testFlights });
 
                 //assert
@@ -736,7 +727,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void NoCollisions()
+            public void OnFlightsChanged_addMultipleFlights_NoCollisions()
             {
                 //arrange
                 List<Flight> testFlights = new List<Flight>
@@ -748,7 +739,6 @@ namespace Test.ATM
                 };
 
                 //act
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.OnFlightsChanged(new FlightArgs() { flights = testFlights });
 
                 //assert
@@ -757,7 +747,7 @@ namespace Test.ATM
             }
 
             [Test]
-            public void NoCollisionsEdgeCases()
+            public void OnFlightsChanged_addMultipleFlights_NoCollisionsEdgeCases()
             {
                 //arrange
                 List<Flight> testFlights = new List<Flight>
@@ -769,7 +759,6 @@ namespace Test.ATM
                 };
 
                 //act
-                //_fakeFlightCollection.flightsChanged += Raise.EventWith(this, new FlightArgs() { flights = testFlights });
                 uut.OnFlightsChanged(new FlightArgs() { flights = testFlights });
 
                 //assert
