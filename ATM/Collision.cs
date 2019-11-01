@@ -9,7 +9,7 @@ namespace ATM.System
 
         public Collision(Flight flightA, Flight flightB)
         {
-            SetFlights(flightA, flightB);
+            SetFlights(flightA, flightB);       
         }
 
         //this method makes sure that two instances of Collision with FlightA and FlightB are created with opposite

@@ -34,7 +34,7 @@ namespace ATM.System
                     //This is not covered by tests, since we do not test the GUI implementation and this affects the GUI
                     Program.setflight(f.TData.X / 200, f.TData.Y / 200, i,f.collision);
 
-                console_.WriteLine(string.Format("Flight: {0}\n\tPosition X:{1} Y:{2}\tAltitude: {3}\n\tSpeed: {4}\t\tDirection {5}\n Collision {6}", f.TData.Tag, f.TData.X, f.TData.Y, f.TData.Altitude, f.Speed, f.Direction,f.collision));
+                console_.WriteLine(string.Format("Flight: {0}\n\tPosition X:{1} Y:{2}\tAltitude: {3}\n\tSpeed: {4}\t\tDirection {5}\n\t Collision {6}\n", f.TData.Tag, f.TData.X, f.TData.Y, f.TData.Altitude, f.Speed, f.Direction,f.collision));
             }
             
         }
