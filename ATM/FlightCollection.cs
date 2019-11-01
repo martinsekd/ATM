@@ -9,7 +9,7 @@ namespace ATM.System
 {
     public class FlightCollection : IFlightCollection
     {
-        private List<Flight> FlightList;
+        public List<Flight> FlightList;
         private IFlightCalculator flightCalculator;
         private ICollisionDetector collisionDetector_;
 
@@ -30,7 +30,7 @@ namespace ATM.System
             {
                 HandleNewData(transponderData);
             }
-            FlightList = collisionDetector_.OnFlightsChanged(new FlightArgs() { flights = FlightList });
+            //FlightList.InsertRange(0,collisionDetector_.OnFlightsChanged(new FlightArgs() { flights = FlightList}));
             Notify();
         }
 
