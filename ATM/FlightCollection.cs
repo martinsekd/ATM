@@ -30,7 +30,11 @@ namespace ATM.System
             {
                 HandleNewData(transponderData);
             }
-            //FlightList.InsertRange(0,collisionDetector_.OnFlightsChanged(new FlightArgs() { flights = FlightList}));
+            List<Flight> newlist = collisionDetector_.OnFlightsChanged(new FlightArgs() {flights = FlightList});
+            for (int i = 0; i < newlist.Count; i++)
+            {
+                FlightList[i].collision = newlist[i].collision;
+            }
             Notify();
         }
 

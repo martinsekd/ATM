@@ -115,6 +115,7 @@ namespace Test.ATM
             private IFlightFilter stubFilter;
             private ICollisionDetector stubCollisionDetector;
             private FlightArgs receivedArgs;
+            private FlightArgs setArgs;
             private int numberOfFlightsChangedEvents;
 
             internal class StubCalculator: IFlightCalculator
@@ -143,6 +144,14 @@ namespace Test.ATM
                 stubCollisionDetector = Substitute.For<ICollisionDetector>();
                 uut = new FlightCollection(stubCalculator, stubFilter,stubCollisionDetector);
                 receivedArgs = null;
+                setArgs = new FlightArgs();
+                setArgs.flights = new List<Flight>();
+
+                TransponderData td = new TransponderData("aaa",0,0,0,new DateTime());
+                Flight f = new Flight(td);
+                stubCollisionDetector.OnFlightsChanged(Arg.Any<FlightArgs>()).ReturnsForAnyArgs(setArgs.flights);
+
+
                 numberOfFlightsChangedEvents = 0;
 
                 uut.flightsChanged += (s, e) =>
@@ -175,13 +184,13 @@ namespace Test.ATM
                 TransponderData testData = new TransponderData("TEST", 0, 0, 0, DateTime.Now);
                 testList.Add(testData);
                 Flight expectedFlight = new Flight(testData);
-
+                setArgs.flights.Add(expectedFlight);
+                
                 //act
                 stubFilter.transponderFilterChanged += Raise.EventWith(this, new TransponderArgs() { transponderData = testList });
-                //uut.GetTransponderData(this, new TransponderArgs() { transponderData = testList });
+                
 
                 //assert
-                
                 Assert.That(receivedArgs.flights[0].Equals(expectedFlight),Is.True);
             }
 
