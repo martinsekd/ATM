@@ -20,6 +20,7 @@ namespace ATM.System
         public void Clear()
         {
             global::System.Console.Clear();
+            //s
         }
     }
 }
